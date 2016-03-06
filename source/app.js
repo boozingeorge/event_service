@@ -1,1 +1,1 @@
-angular.module('EventService',['ngMaterial']);
+var EventService = angular.module('EventService',['ngMaterial']);

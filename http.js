@@ -3,10 +3,10 @@ var express = require('express'),
     logger = require('morgan'),
     bodyParser = require('body-parser')
     debug = require('debug')('event-service'),
+    config = require('./config/config'),
     http = require('http');
 
-var port = 3000;
-
+var port = config.port;
 var app = express();
 
 if (process.env.NODE_ENV === 'development') {

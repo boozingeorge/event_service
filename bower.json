@@ -3,7 +3,8 @@
   "description": "event service",
   "main": "index.js",
   "authors": [
-    "boozin"
+    "boozin",
+    "nnazarchuk"
   ],
   "license": "BSD-2-Clause",
   "moduleType": [],

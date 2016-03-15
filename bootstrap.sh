@@ -26,3 +26,6 @@ npm install
 
 sudo npm install -g forever
 sudo npm install -g bower
+sudo npm install -g grunt-cli
+
+sudo npm link grunt

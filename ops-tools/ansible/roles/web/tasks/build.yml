@@ -1,0 +1,6 @@
+---
+
+- name: Build app by Grunt
+  command: grunt
+  args:
+    chdir: "{{ app_dir }}" 

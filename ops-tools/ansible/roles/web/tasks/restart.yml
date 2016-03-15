@@ -1,0 +1,14 @@
+---
+
+- name: Check list of Node.js apps running
+  command: forever list
+  register: forever_list
+  changed_when: false
+
+- name: Start app
+  command: forever start "{{ app_dir }}/http.js"
+  when: "forever_list.stdout.find('{{ app_dir }}/http.js') == -1"
+  
+- name: Restart app
+  command: forever restart "{{ app_dir }}/http.js"
+  when: "forever_list.stdout.find('{{ app_dir }}/http.js') != -1"

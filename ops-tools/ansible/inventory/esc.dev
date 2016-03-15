@@ -1,0 +1,5 @@
+[all:vars]
+env=dev
+
+[web-nodes]
+52.193.244.203 ansible_connection=ssh ansible_user=admin ansible_ssh_user=admin

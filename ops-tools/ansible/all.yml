@@ -1,0 +1,6 @@
+- hosts: web-nodes
+  vars_files:
+    - settings/{{ env }}.json
+  roles:
+    - common
+    - web

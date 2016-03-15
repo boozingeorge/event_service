@@ -1,0 +1,7 @@
+---
+
+- include: prepare.yml
+- include: install.yml
+- include: configure.yml
+- include: build.yml
+- include: restart.yml 

@@ -1,0 +1,15 @@
+---
+
+- name: Install npm packeges
+  command: npm install
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: Install npm global packeges
+  npm:
+    name: "{{ item }}"
+    global: yes
+  with_items:
+      - forever
+      - grunt-cli
+      - mysql

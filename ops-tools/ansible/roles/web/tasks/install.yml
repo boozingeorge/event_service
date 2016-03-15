@@ -12,4 +12,3 @@
   with_items:
       - forever
       - grunt-cli
-      - mysql

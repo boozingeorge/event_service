@@ -1,3 +1,11 @@
 {
-    "port": "{{ config.port }}"
+    "port": "{{ config.port }}",
+    "oauth2": {
+        "clientId": "{{ config.oauth2.clientId }}",
+        "clientSecret": "{{ config.oauth2.clientSecret }}",
+        "site": "{{ config.oauth2.site }}",
+        "tokenPath": "{{ config.oauth2.tokenPath }}",
+        "authorizationPath": "{{ config.oauth2.authorizationPath }}"
+    },
+    "sessionSecret": "{{ config.sessionSecret }}"
 }

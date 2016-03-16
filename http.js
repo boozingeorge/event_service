@@ -2,6 +2,8 @@ var express = require('express'),
     path = require('path'),
     logger = require('morgan'),
     bodyParser = require('body-parser')
+    cookieParser = require('cookie-parser'),
+    session = require('express-session'),
     debug = require('debug')('event-service'),
     config = require('./config/config'),
     http = require('http');
@@ -10,20 +12,41 @@ var port = config.port;
 var app = express();
 
 if (process.env.NODE_ENV === 'development') {
-  console.log(1);
   app.use(logger('dev'));
 }
+
+// view engine setup
+app.set('views', path.join(__dirname, './views'));
+app.set('view engine', 'jade');
 
 // body parsing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// cookies and sessions
+app.use(cookieParser());
+app.use(session({
+  secret: config.sessionSecret,
+  resave: true,
+  saveUninitialized: false
+}));
+
+// routing
 app.use(require('./lib/router'));
 
 // error handler
 app.use(function(err, req, res, next) {
-  res.status(500);
-  res.render('error', { error: err });
+  if (process.env.NODE_ENV === 'development') {
+    res.render('error', {
+      error_code: err.code || 500,
+      error_message: err.message || 'Internal Server Error',
+    });
+  } else {
+    res.render('error', {
+      error_code: 500,
+      error_message: 'Internal Server Error',
+    });
+  }
 });
 
 /**

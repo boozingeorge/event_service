@@ -29,3 +29,4 @@ sudo npm install -g bower
 sudo npm install -g grunt-cli
 
 sudo npm link grunt
+sudo npm link jade

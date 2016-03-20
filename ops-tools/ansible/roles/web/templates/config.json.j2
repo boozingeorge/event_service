@@ -7,5 +7,10 @@
         "tokenPath": "{{ config.oauth2.tokenPath }}",
         "authorizationPath": "{{ config.oauth2.authorizationPath }}"
     },
+    "redis": {
+        "host": "{{ config.redis.host }}",
+        "port": {{ config.redis.port }},
+        "ttl": {{ config.redis.ttl }}
+    },
     "sessionSecret": "{{ config.sessionSecret }}"
 }

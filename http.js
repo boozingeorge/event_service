@@ -1,6 +1,7 @@
 var express = require('express'),
     path = require('path'),
     logger = require('morgan'),
+    redis = require("redis"),
     bodyParser = require('body-parser')
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
@@ -10,6 +11,8 @@ var express = require('express'),
 
 var port = config.port;
 var app = express();
+var RedisStore = require('connect-redis')(session);
+var redisClient  = redis.createClient();
 
 if (process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));
@@ -26,8 +29,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // cookies and sessions
 app.use(cookieParser());
 app.use(session({
+  store: new RedisStore({
+    host: config.redis.host,
+    port: config.redis.port,
+    client: redisClient,
+    ttl: config.redis.ttl
+  }),
   secret: config.sessionSecret,
-  resave: true,
+  resave: false,
   saveUninitialized: false
 }));
 

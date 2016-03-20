@@ -7,5 +7,10 @@
         "tokenPath": "/oauth2/access_token",
         "authorizationPath": "/oauth2/auth"
     },
-    "sessionSecret": "khpyRcyG2Hyz6d8NrDNp1Pc1wZVeHwZ2SjQOKi"
+    "redis": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "ttl": 260
+    },
+    "sessionSecret": "khpyRcyG2Hyz6d8NrDNp1Pc1wZVeHwZ2SjQOi"
 }

@@ -19,9 +19,9 @@ fi
 
 # Install nodejs packeges
 cd /home/vagrant
-mkdir node_modules_es_api_server
+mkdir node_modules_ecc
 cd /vagrant
-ln -s /home/vagrant/node_modules_es_api_server node_modules
+ln -s /home/vagrant/node_modules_ecc node_modules
 npm install
 
 sudo npm install -g forever
@@ -30,3 +30,5 @@ sudo npm install -g grunt-cli
 
 sudo npm link grunt
 sudo npm link jade
+sudo npm link debug
+sudo npm link redis

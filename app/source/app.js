@@ -37,3 +37,6 @@ EventService.component('main', {
   transclude: false,
   controller:MainController
 });
+EventService.factory('APIClient', function() {
+  return new APIClient();
+});

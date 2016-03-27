@@ -56,18 +56,19 @@ function MapController($scope, $element, $attrs, $timeout, $compile){
     e.preventDefault();
     google.maps.event.trigger(selectedMarker, 'click');
   };
-  ctrl.child.addMarkers = function(events) {
+
+  //bullshit
+  ctrl.callofchild.addMarkers = function(events) {
     for (var i = 0; i < events.length; i++) {
       createMarker(events[i]);
     }
   };
-
 }
 EventService.component('map', {
   template:'<div id="map"></div>',
   bindings:{
     events:'=',
-    child: '='
+    callofchild: '='
   },
   controller:MapController
 });

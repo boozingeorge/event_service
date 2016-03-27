@@ -88,6 +88,29 @@ function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
       return (event.name.toLowerCase().indexOf(lowercaseQuery) === 0);
     };
   }
+
+  //bullshit
+  ctrl.callofchild.firstView = function (events) {
+    ctrl.firstView = crutchView(events);
+  };
+  function crutchView(events) {
+    if (events.length < 10) {
+      return events.map(function (event) {
+        return {
+          name: event.name
+        };
+      });
+    }
+    else {
+      var results = [];
+      for (var i = 0; i < 10; i++) {
+        results[i] = {
+          name: events[i].name
+        }
+      }
+      return results;
+    }
+  }
 }
 EventService.run(function ($templateCache) {
   $templateCache.put('search.html', '<form id="search" ng-submit="$event.preventDefault()">' +
@@ -113,7 +136,8 @@ EventService.run(function ($templateCache) {
 EventService.component('search', {
   templateUrl: 'search.html',
   bindings: {
-    events: '='
+    events: '=',
+    callofchild: '='
   },
   controller: SearchController
 });

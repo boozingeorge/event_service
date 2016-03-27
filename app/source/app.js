@@ -28,7 +28,7 @@ function MainController($scope, $element, $attrs, $http, APIClient){
     }
   ];*/
   ctrl.events = [];
-  ctrl.child = {};
+  ctrl.callofchild = {};
   APIClient.getToken(function (err, token) {
 
     if (err) {
@@ -53,7 +53,9 @@ function MainController($scope, $element, $attrs, $http, APIClient){
         };
       });
       //TO DO change to promise
-      ctrl.child.addMarkers(ctrl.events);
+      //bullshit
+      ctrl.callofchild.addMarkers(ctrl.events);
+      ctrl.callofchild.firstView(ctrl.events);
       console.log(ctrl.events);
     }, function(response){
       console.log(response);
@@ -61,10 +63,10 @@ function MainController($scope, $element, $attrs, $http, APIClient){
   }
 }
 EventService.component('main', {
-  template:'<map events="$ctrl.events" child="$ctrl.child"></map>' +
+  template:'<map events="$ctrl.events" callofchild="$ctrl.callofchild"></map>' +
   '<div class="tools" layot="row">' +
-    '<menu events="$ctrl.events"></menu>'+
-    '<cards events="$ctrl.events"></cards>'+
+    '<menu events="$ctrl.events" callofchild="$ctrl.callofchild"></menu>'+
+    '<cards events="$ctrl.events" callofchild="$ctrl.callofchild"></cards>'+
   '</div>',
   transclude: false,
   controller:MainController

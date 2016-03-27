@@ -1,37 +1,5 @@
-function MapController($scope, $element, $attrs,$timeout){
+function MapController($scope, $element, $attrs,$timeout, $compile){
   var ctrl = this;
-  var cities = [
-    {
-      city : 'Event 1',
-      desc : 'Desciption',
-      lat : 54.991993,
-      long : 73.363718
-    },
-    {
-      city : 'Event 2',
-      desc : 'Desciption',
-      lat : 54.998222,
-      long : 73.355696
-    },
-    {
-      city : 'Event 3',
-      desc : 'Desciption',
-      lat : 54.990148,
-      long : 73.366974
-    },
-    {
-      city : 'Event 4',
-      desc : 'Desciption',
-      lat : 54.983804,
-      long : 73.375183
-    }/*,
-    {
-      city : 'Event 5 ',
-      desc : 'Desciption',
-      lat : 54.989431,
-      long : 73.373681
-    }*/
-  ];
   var mapOptions = {
     zoom: 14,
     center: new google.maps.LatLng(54.993437, 73.365768),
@@ -54,30 +22,41 @@ function MapController($scope, $element, $attrs,$timeout){
     var marker = new google.maps.Marker({
       map: ctrl.map,
       position: new google.maps.LatLng(info.lat, info.long),
-      title: info.city
+      title: info.name
     });
-    marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
+    //marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
 
-    google.maps.event.addListener(marker, 'mouseover', function(){
-      infoWindow.setContent('<h2>' + marker.title + '</h2>' + marker.content);
+    google.maps.event.addListener(marker, 'click', function(){
+      var content = '<md-card style="box-shadow: 0px 0px 0px 0px">'+
+        '<md-card-title>'+
+        '<md-card-title-text>'+
+        '<span class="md-headline">'+ marker.title +'</span>'+
+        '<span class="md-subhead">'+ info.desc +'</span>'+
+        '</md-card-title-text>'+
+        '</md-card-title>'+
+        '<md-card-actions layout="row" layout-align="end center">'+
+        '<md-button>Подробнее</md-button>'+
+        '<md-button>Пойду</md-button>'+
+        '</md-card-actions>'+
+        '</md-card>'+
+        '';
+      var compiled = $compile(content)($scope);
+      infoWindow.setContent(compiled[0]);
       infoWindow.open(ctrl.map, marker);
-    });
-    google.maps.event.addListener(marker, 'mouseout', function(){
-      infoWindow.close();
     });
     ctrl.markers.push(marker);
 
   };
 
-  for (var i = 0; i < cities.length; i++){
-    createMarker(cities[i]);
+  for (var i = 0; i < ctrl.events.length; i++){
+    createMarker(ctrl.events[i]);
   }
 
   ctrl.openInfoWindow = function(e, selectedMarker){
     e.preventDefault();
     google.maps.event.trigger(selectedMarker, 'click');
   };
-  function CustomMarker(latlng, map, args) {
+  /*function CustomMarker(latlng, map, args) {
     this.latlng = latlng;
     this.args = args;
     this.setMap(map);
@@ -147,10 +126,13 @@ function MapController($scope, $element, $attrs,$timeout){
       marker_id: '123',
       radius: 20
     }
-  );
+  );*/
 
 }
 EventService.component('map', {
   template:'<div id="map"></div>',
+  bindings:{
+    events:'='
+  },
   controller:MapController
 });

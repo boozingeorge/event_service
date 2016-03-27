@@ -17,6 +17,30 @@ map{
   left:0;
   position: absolute;
 }
+menu{
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+burger{
+}
+
+#burger-toolbar{
+}
+#burger-grid{
+  width: 70px;
+  margin: 0 0 0 8px;
+}
+#search-grid{
+  margin: 0 8px 0 0;
+  min-width: 250px;
+  width: 100%;
+}
+#search{
+
+}
+.tools{
+  width:340px;
+}
 a {
   text-decoration: none;
 }

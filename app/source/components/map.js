@@ -52,16 +52,22 @@ function MapController($scope, $element, $attrs, $timeout, $compile){
   for (var i = 0; i < ctrl.events.length; i++){
     createMarker(ctrl.events[i]);
   }
-
   ctrl.openInfoWindow = function(e, selectedMarker){
     e.preventDefault();
     google.maps.event.trigger(selectedMarker, 'click');
   };
+  ctrl.child.addMarkers = function(events) {
+    for (var i = 0; i < events.length; i++) {
+      createMarker(events[i]);
+    }
+  };
+
 }
 EventService.component('map', {
   template:'<div id="map"></div>',
   bindings:{
-    events:'='
+    events:'=',
+    child: '='
   },
   controller:MapController
 });

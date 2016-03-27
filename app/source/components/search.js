@@ -5,22 +5,6 @@ function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
   ctrl.isDisabled = false;
   // list of `event` value/display objects
   //ctrl.events = loadAll();
-  ctrl.govno = [
-    {
-      display: 'Event',
-      value: 'event',
-      desc: 'Desciption',
-      lat: 54.991993,
-      long: 73.363718
-    },
-    {
-      display: 'String ',
-      value: 'string',
-      desc: 'Desciption',
-      lat: 54.989431,
-      long: 73.373681
-    }
-  ];
   ctrl.firstView = firstView();
   ctrl.querySearch = querySearch;
   ctrl.selectedItemChange = selectedItemChange;

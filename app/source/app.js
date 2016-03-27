@@ -8,3 +8,6 @@ EventService.component('main', {
   transclude: true,
   controller:MainController
 });
+EventService.factory('APIClient', function() {
+  return new APIClient();
+});

@@ -27,15 +27,17 @@ EventService.run(function ($templateCache) {
     '</md-fab-trigger>' +
     '<md-toolbar>' +
     '<md-fab-actions class="md-toolbar-tools">' +
-    '<md-button aria-label="comment" class="md-icon-button">' +
-    '<md-icon md-svg-src="svg/ic_account_box_48px.svg"></md-icon>' +
-    '</md-button>' +
     '<md-button aria-label="label" class="md-icon-button">' +
     '<md-icon md-svg-src="svg/ic_add_location_48px.svg"></md-icon>' +
     '</md-button>' +
-    '<md-button aria-label="photo" class="md-icon-button">' +
-    '<md-icon md-svg-src="svg/ic_search_48px.svg"></md-icon>' +
+    '<md-button aria-label="comment" class="md-icon-button">' +
+    '<md-icon md-svg-src="svg/ic_account_box_48px.svg"></md-icon>' +
     '</md-button>' +
+    '<a href="/logout">' +
+    '<md-button aria-label="photo" class="md-icon-button">' +
+    '<md-icon md-svg-src="svg/ic_exit_to_app_48px.svg"></md-icon>' +
+    '</md-button>' +
+    '</a>' +
     '</md-fab-actions>' +
     '</md-toolbar>' +
     '</md-fab-toolbar>');

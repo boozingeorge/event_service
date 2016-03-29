@@ -10,7 +10,7 @@
     "redis": {
         "host": "127.0.0.1",
         "port": 6379,
-        "ttl": 260
+        "ttl": 86400
     },
     "sessionSecret": "khpyRcyG2Hyz6d8NrDNp1Pc1wZVeHwZ2SjQOKi"
 }

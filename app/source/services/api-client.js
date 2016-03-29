@@ -1,11 +1,10 @@
 EventService.factory('APIClient', APIClientService);
 
 function APIClientService($http) {
-  
+
   function APIClient() {
     if (!store.enabled) {
-      alert('Local storage is not supported by your browser. Please disable "Private Mode", or upgrade to a modern browser');
-      return;
+      throw new Error('Local storage is not supported by your browser. Please disable "Private Mode", or upgrade to a modern browser');
     }
     store.clear();
   }
@@ -25,7 +24,7 @@ function APIClientService($http) {
         store.set('expires_in', response.data.expires_in);
         callback(null, response.data.token);
       }, function (xhr, status, error) {
-        //TO DO response code
+        // TODO: response code
         console.log('/api/get_access_token -- failed');
         var error = JSON.parse(xhr.responseText);
         callback({
@@ -35,8 +34,8 @@ function APIClientService($http) {
       });
     } else {
       var expiresInUpdated = expiresIn - Math.floor(((new Date().getTime()) - timestamp) / 1000);
-      /**
-       * if (expiresInUpdated < 0) refresh token if refresh_error
+      /*
+       * TODO: if (expiresInUpdated < 0) refresh token if refresh_error
        */
       if (expiresInUpdated > 0) {
         callback(null, token);

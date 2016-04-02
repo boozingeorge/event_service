@@ -1,10 +1,9 @@
 EventService.factory('APIClient', APIClientService);
 
-function APIClientService($http, $q,$timeout) {
+function APIClientService($http, $q,$timeout, basicURL) {
 
   function APIClient() {
     var self = this;
-    self._basicURL = 'http://52.193.244.203:8080';
     self._token = null;
     self.observable = new Rx.Subject();
     if (!store.enabled) {
@@ -32,8 +31,7 @@ function APIClientService($http, $q,$timeout) {
         self._token = response.data.token;
         deferred.resolve(response.data.token);
       }, function (response) {
-        // TODO: response code
-        console.log('/api/get_access_token -- failed');
+        //TODO: pop up
         deferred.reject(response);
       });
       return deferred.promise;
@@ -60,7 +58,7 @@ function APIClientService($http, $q,$timeout) {
     var deferred = $q.defer();
     $http({
       method: 'GET',
-      url: self._basicURL + '/api/event.get?access_token=' + self._token
+      url: basicURL + '/api/event.get?access_token=' + self._token
     }).then(function (response) {
       var events = response.data.response.map(function (event) {
         return {
@@ -78,7 +76,6 @@ function APIClientService($http, $q,$timeout) {
       deferred.resolve(events);
     }, function(response){
       // TODO: show error in popup window
-      console.log(response);
       deferred.reject(response);
     });
     return deferred.promise;

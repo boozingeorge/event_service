@@ -7,13 +7,13 @@ module.exports = function(grunt) {
           targetDir: './app/bower',
           install: true,
           verbose: false,
-          cleanTargetDir: true,
-          cleanBowerDir: true,
-        },
+          cleanTargetDir: false,
+          cleanBowerDir: false
+        }
       }
     }
   });
-  
+
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.registerTask('default', ['bower']);
 };

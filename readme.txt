@@ -7,6 +7,9 @@ sudo add-apt-repository ppa:chris-lea/redis-server
 sudo apt-get update
 sudo apt-get install redis-server
 
+--rename config
+config.dist.json -> config.json
+
 --run server
 export NODE_ENV=development && node http.js
 

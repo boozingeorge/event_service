@@ -1,4 +1,4 @@
-function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
+function SearchController($scope, $element, $attrs, $timeout, $log, $q, APIClient) {
 
   var ctrl = this;
   ctrl.simulateQuery = false;
@@ -33,8 +33,8 @@ function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
     } else {
       return results.map(function (event) {
         return {
-          value: event.name.toLowerCase(),
-          display: event.name
+          value: event.title.toLowerCase(),
+          display: event.title
         };
       });
     }
@@ -44,7 +44,7 @@ function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
     if (ctrl.events.length < 10) {
       return ctrl.events.map(function (event) {
         return {
-          name: event.name
+          title: event.title
         };
       });
     }
@@ -52,7 +52,7 @@ function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
       var results = [];
       for (var i = 0; i < 10; i++) {
         results[i] = {
-          name: ctrl.events[i].name
+          title: ctrl.events[i].title
         }
       }
       return results;
@@ -73,8 +73,8 @@ function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
   function loadAll() {
     return ctrl.events.map(function (event) {
       return {
-        value: event.name.toLowerCase(),
-        display: event.name
+        value: event.title.toLowerCase(),
+        display: event.title
       };
     });
   }
@@ -85,39 +85,26 @@ function SearchController($scope, $element, $attrs, $timeout, $log, $q) {
   function createFilterFor(query) {
     var lowercaseQuery = angular.lowercase(query);
     return function filterFn(event) {
-      return (event.name.toLowerCase().indexOf(lowercaseQuery) === 0);
+      return (event.title.toLowerCase().indexOf(lowercaseQuery) === 0);
     };
   }
 
-  //bullshit
-  ctrl.callofchild.firstView = function (events) {
-    ctrl.firstView = crutchView(events);
-  };
-  function crutchView(events) {
-    if (events.length < 10) {
-      return events.map(function (event) {
-        return {
-          name: event.name
-        };
-      });
+  APIClient.observable.subscribe(function(x) {
+    if(x == 'events'){
+      ctrl.firstView = firstView();
     }
-    else {
-      var results = [];
-      for (var i = 0; i < 10; i++) {
-        results[i] = {
-          name: events[i].name
-        }
-      }
-      return results;
-    }
-  }
+  },function(e){
+    console.log('onError: %s', e)
+  },function(){
+    console.log('onCompleted')
+  });
 }
 EventService.run(function ($templateCache) {
   $templateCache.put('search.html', '<form id="search" ng-submit="$event.preventDefault()">' +
     '<md-autocomplete ng-disabled="$ctrl.isDisabled" md-no-cache="$ctrl.noCache" md-selected-item="$ctrl.selectedItem"' +
-    'md-search-text-change="$ctrl.searchTextChange($ctrl.searchText)"' +
+    'md-search-text-change=""' +
     'md-search-text="$ctrl.searchText"' +
-    'md-selected-item-change="$ctrl.selectedItemChange(item)"' +
+    'md-selected-item-change=""' +
     'md-items="item in $ctrl.querySearch($ctrl.searchText)"' +
     'md-item-text="item.display"' +
     'md-min-length="0"' +
@@ -136,8 +123,7 @@ EventService.run(function ($templateCache) {
 EventService.component('search', {
   templateUrl: 'search.html',
   bindings: {
-    events: '=',
-    callofchild: '='
+    events: '<'
   },
   controller: SearchController
 });

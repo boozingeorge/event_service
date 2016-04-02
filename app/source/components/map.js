@@ -1,4 +1,4 @@
-function MapController($scope, $element, $attrs, $timeout, $compile){
+function MapController($scope, $element, $attrs, $timeout, $compile, APIClient){
   var ctrl = this;
 
   var mapOptions = {
@@ -18,21 +18,36 @@ function MapController($scope, $element, $attrs, $timeout, $compile){
 
   var infoWindow = new google.maps.InfoWindow();
 
-  var createMarker = function (info){
+  ctrl.openInfoWindow = function(e, selectedMarker){
+    e.preventDefault();
+    google.maps.event.trigger(selectedMarker, 'click');
+  };
+
+
+  APIClient.observable.subscribe(function(x) {
+    if(x == 'events'){
+      CreateAllMarkers();
+    }
+  },function(e){
+    console.log('onError: %s', e)
+  },function(){
+    console.log('onCompleted')
+  });
+
+  function createMarker(info){
 
     var marker = new google.maps.Marker({
       map: ctrl.map,
       position: new google.maps.LatLng(info.lat, info.long),
-      title: info.name
+      title: info.title
     });
-    //marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
 
     google.maps.event.addListener(marker, 'click', function(){
       var content = '<md-card style="box-shadow: 0px 0px 0px 0px">'+
         '<md-card-title>'+
         '<md-card-title-text>'+
         '<span class="md-headline">'+ marker.title +'</span>'+
-        '<span class="md-subhead">'+ info.desc +'</span>'+
+        '<span class="md-subhead">'+ info.description +'</span>'+
         '</md-card-title-text>'+
         '</md-card-title>'+
         '<md-card-actions layout="row" layout-align="end center">'+
@@ -46,29 +61,18 @@ function MapController($scope, $element, $attrs, $timeout, $compile){
       infoWindow.open(ctrl.map, marker);
     });
     ctrl.markers.push(marker);
-
-  };
-
-  for (var i = 0; i < ctrl.events.length; i++){
-    createMarker(ctrl.events[i]);
   }
-  ctrl.openInfoWindow = function(e, selectedMarker){
-    e.preventDefault();
-    google.maps.event.trigger(selectedMarker, 'click');
-  };
 
-  //bullshit
-  ctrl.callofchild.addMarkers = function(events) {
-    for (var i = 0; i < events.length; i++) {
-      createMarker(events[i]);
+  function CreateAllMarkers(){
+    for (var i = 0; i < ctrl.events.length; i++){
+      createMarker(ctrl.events[i]);
     }
-  };
+  }
 }
 EventService.component('map', {
   template:'<div id="map"></div>',
   bindings:{
-    events:'=',
-    callofchild: '='
+    events:'<'
   },
   controller:MapController
 });

@@ -12,16 +12,12 @@ function BurgerController($scope, $element, $attrs, $timeout, $log, $q) {
     var burgerWidth = angular.element(searchElem).prop('offsetWidth') +
       searchElem.getBoundingClientRect().left - document.querySelector('#burger-grid').getBoundingClientRect().left;
     angular.element(document.querySelector('#burger-toolbar')).css('width',burgerWidth + 'px');
-    //console.log(angular.element(searchElem).prop('offsetWidth') + ' + ' + searchElem.getBoundingClientRect().left);
   });
-  ctrl.ada = function($event){
-    console.log($event);
-  };
 }
 EventService.run(function ($templateCache) {
   $templateCache.put('burger.html', '<md-fab-toolbar id="burger-toolbar" md-open="$ctrl.demo.isOpen" count="$ctrl.demo.count" md-direction="right">' +
     '<md-fab-trigger class="align-with-text">' +
-    '<md-button ng-click="$ctrl.ada($event)" aria-label="menu" class="md-fab md-primary">' +
+    '<md-button aria-label="menu" class="md-fab md-primary">' +
     '<md-icon md-svg-src="svg/ic_menu_24px.svg"></md-icon>' +
     '</md-button>' +
     '</md-fab-trigger>' +

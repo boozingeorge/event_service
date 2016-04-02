@@ -3,7 +3,7 @@ EventService.component('main', {
   transclude: false,
   controller:MainController
 });
-function MainController(APIClient){
+function MainController(APIClient, PopUp){
   var ctrl = this;
   ctrl.events = [];
 
@@ -17,6 +17,6 @@ function MainController(APIClient){
   APIClient.Connect().then(function(response){
     ctrl.events = response;
   }, function(response){
-    //TODO: pop up
+    PopUp.ConnectError();
   });
 }

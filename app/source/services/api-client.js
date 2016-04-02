@@ -49,9 +49,13 @@ function APIClientService($http, $q, $timeout, basicURL) {
   APIClient.prototype.getAllEvents = function () {
     var self = this;
     var deferred = $q.defer();
-    $http({
-      method: 'GET',
-      url: basicURL + '/api/event.get?access_token=' + self._token
+    self.getToken().then(function (response) {
+      return $http({
+        method: 'GET',
+        url: basicURL + '/api/event.get?access_token=' + self._token
+      })
+    }, function (response) {
+      deferred.reject(response);
     }).then(function (response) {
       var events = response.data.response.map(function (event) {
         return {
@@ -72,16 +76,11 @@ function APIClientService($http, $q, $timeout, basicURL) {
     });
     return deferred.promise;
   };
-  
+
   APIClient.prototype.Connect = function () {
     var self = this;
     var deferred = $q.defer();
-    self.getToken().then(function (response) {
-      return self.getAllEvents();
-    }, function (response) {
-      var deferred = $q.defer();
-      deferred.reject(response);
-    }).then(function (response) {
+    self.getAllEvents().then(function (response) {
       deferred.resolve(response);
       $timeout(function () {
         self.observable.onNext('events');

@@ -1,61 +1,52 @@
 EventService.factory('APIClient', APIClientService);
 
-function APIClientService($http, $q,$timeout) {
+function APIClientService($http, $q, $timeout, basicURL) {
 
   function APIClient() {
     var self = this;
-    self._basicURL = 'http://52.193.244.203:8080';
+    self._basicURL = basicURL;
     self._token = null;
     self.observable = new Rx.Subject();
-    if (!store.enabled) {
-      throw new Error('Local storage is not supported by your browser. Please disable "Private Mode", or upgrade to a modern browser');
-    }
-    store.clear();
   }
 
   APIClient.prototype.getToken = function () {
-    var token = store.get('token');
-    var expiresIn = store.get('expires_in');
-    var timestamp = store.get('timestamp');
     var self = this;
-
-    if (!token || !expiresIn || !timestamp) {
-      var deferred = $q.defer();
+    var deferred = $q.defer();
+    
+    if (!self._token) {
+      
       $http({
         method: 'GET',
         url: '/api/get_access_token'
       }).then(function (response) {
-        store.set('token', response.data.token);
-        store.set('timestamp', (new Date().getTime()));
-        store.set('expires_in', response.data.expires_in);
-        //callback(null, response.data.token);
-        self._token = response.data.token;
+        self._token = {
+          value: response.data.token,
+          expires_in: response.data.expires_in,
+          timestamp: new Date().getTime()
+        };
         deferred.resolve(response.data.token);
       }, function (response) {
-        // TODO: response code
-        console.log('/api/get_access_token -- failed');
         deferred.reject(response);
       });
-      return deferred.promise;
+      
     } else {
-      var deferred = $q.defer();
-      var expiresInUpdated = expiresIn - Math.floor(((new Date().getTime()) - timestamp) / 1000);
+      var expiresInUpdated = self._token.expires_in - Math.floor(((new Date().getTime()) - self._token.timestamp) / 1000);
       /*
        * TODO: if (expiresInUpdated < 0) refresh token if refresh_error
        */
       if (expiresInUpdated > 0) {
-        deferred.resolve(token);
+        deferred.resolve(self._token.value);
       } else {
         deferred.reject({
           error: 'token_expired',
           error_message: 'Token is expired'
         });
       }
-      return deferred.promise;
     }
+    return deferred.promise;
   };
 
-  APIClient.prototype.getAllEvents = function(){
+  APIClient.prototype.getAllEvents = function () {
     var self = this;
     var deferred = $q.defer();
     $http({
@@ -64,38 +55,37 @@ function APIClientService($http, $q,$timeout) {
     }).then(function (response) {
       var events = response.data.response.map(function (event) {
         return {
-          id : event.id,
-          begin_at : event.begin_at,
-          end_at : event.end_at,
-          members_amount : event.members_amount,
-          title : event.title,
-          description : event.description,
-          lat : event.lat,
-          long : event.long,
-          picture : event.picture
+          id: event.id,
+          begin_at: event.begin_at,
+          end_at: event.end_at,
+          members_amount: event.members_amount,
+          title: event.title,
+          description: event.description,
+          lat: event.lat,
+          long: event.long,
+          picture: event.picture
         };
       });
       deferred.resolve(events);
-    }, function(response){
+    }, function (response) {
       // TODO: show error in popup window
-      console.log(response);
       deferred.reject(response);
     });
     return deferred.promise;
   };
-  APIClient.prototype.Connect = function(){
+  APIClient.prototype.Connect = function () {
     var self = this;
     var deferred = $q.defer();
-    self.getToken().then(function(response){
-      self.getAllEvents().then(function(res){
+    self.getToken().then(function (response) {
+      self.getAllEvents().then(function (res) {
         deferred.resolve(res);
-        $timeout(function(){
-          self.observable.onNext('events')
+        $timeout(function () {
+          self.observable.onNext('events');
         });
-      }, function(res){
+      }, function (res) {
         deferred.reject(res);
       });
-    },function(response){
+    }, function (response) {
       var deferred = $q.defer();
       deferred.reject(response);
     });

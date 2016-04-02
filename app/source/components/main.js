@@ -18,7 +18,6 @@ function MainController($scope, $element, $attrs, $http, APIClient, basicURL){
   },function(){
     console.log('onCompleted')
   });
-  APIClient.getToken();
   APIClient.Connect().then(function(response){
     ctrl.events = response;
   }, function(response){

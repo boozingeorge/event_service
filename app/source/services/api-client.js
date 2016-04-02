@@ -51,7 +51,7 @@ function APIClientService($http, $q, $timeout, basicURL) {
     var deferred = $q.defer();
     $http({
       method: 'GET',
-      url: self._basicURL + '/api/event.get?access_token=' + self._token
+      url: basicURL + '/api/event.get?access_token=' + self._token
     }).then(function (response) {
       var events = response.data.response.map(function (event) {
         return {
@@ -89,7 +89,6 @@ function APIClientService($http, $q, $timeout, basicURL) {
     }, function (response) {
       deferred.reject(response);
     });
-    
     return deferred.promise;
   };
 

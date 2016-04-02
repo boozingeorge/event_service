@@ -11,9 +11,23 @@ module.exports = function(grunt) {
           cleanBowerDir: false
         }
       }
+    },
+    ngtemplates: {
+      templates: {
+        cwd:  './app/source/templates',
+        src:  ['**/*.html'],
+        dest: './app/source/templates/templates.js',
+        options: {
+          base:   '.',
+          module: 'EventService',
+          prefix: 'templates/'
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-angular-templates');
   grunt.registerTask('default', ['bower']);
+  grunt.registerTask('dev', ['ngtemplates']);
 };

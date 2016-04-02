@@ -1,4 +1,4 @@
-function MapController($scope, $element, $attrs, $timeout, $compile, APIClient){
+function MapController($scope, $compile, APIClient){
   var ctrl = this;
 
   var mapOptions = {
@@ -23,15 +23,14 @@ function MapController($scope, $element, $attrs, $timeout, $compile, APIClient){
     google.maps.event.trigger(selectedMarker, 'click');
   };
 
-
   APIClient.observable.subscribe(function(x) {
     if(x == 'events'){
       CreateAllMarkers();
     }
   },function(e){
-    console.log('onError: %s', e)
+    //TODO: handler for error
   },function(){
-    console.log('onCompleted')
+    //TODO: handler for complete
   });
 
   function createMarker(info){
@@ -70,7 +69,7 @@ function MapController($scope, $element, $attrs, $timeout, $compile, APIClient){
   }
 }
 EventService.component('map', {
-  template:'<div id="map"></div>',
+  templateUrl: 'templates/map.html',
   bindings:{
     events:'<'
   },

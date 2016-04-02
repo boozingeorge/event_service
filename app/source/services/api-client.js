@@ -1,6 +1,6 @@
 EventService.factory('APIClient', APIClientService);
 
-function APIClientService($http, $q,$timeout, basicURL) {
+function APIClientService($http, $q, $timeout, basicURL) {
 
   function APIClient() {
     var self = this;
@@ -53,7 +53,7 @@ function APIClientService($http, $q,$timeout, basicURL) {
     }
   };
 
-  APIClient.prototype.getAllEvents = function(){
+  APIClient.prototype.getAllEvents = function () {
     var self = this;
     var deferred = $q.defer();
     $http({
@@ -62,40 +62,44 @@ function APIClientService($http, $q,$timeout, basicURL) {
     }).then(function (response) {
       var events = response.data.response.map(function (event) {
         return {
-          id : event.id,
-          begin_at : event.begin_at,
-          end_at : event.end_at,
-          members_amount : event.members_amount,
-          title : event.title,
-          description : event.description,
-          lat : event.lat,
-          long : event.long,
-          picture : event.picture
+          id: event.id,
+          begin_at: event.begin_at,
+          end_at: event.end_at,
+          members_amount: event.members_amount,
+          title: event.title,
+          description: event.description,
+          lat: event.lat,
+          long: event.long,
+          picture: event.picture
         };
       });
       deferred.resolve(events);
-    }, function(response){
+    }, function (response) {
       // TODO: show error in popup window
       deferred.reject(response);
     });
     return deferred.promise;
   };
-  APIClient.prototype.Connect = function(){
+  APIClient.prototype.Connect = function () {
     var self = this;
     var deferred = $q.defer();
-    self.getToken().then(function(response){
-      self.getAllEvents().then(function(res){
+
+    self.getToken()
+      .then(function (response) {
+        return self.getAllEvents();
+      }, function (response) {
+        var deferred = $q.defer();
+        deferred.reject(response);
+      })
+      .then(function (res) {
         deferred.resolve(res);
-        $timeout(function(){
+        $timeout(function () {
           self.observable.onNext('events')
         });
-      }, function(res){
+      }, function (res) {
         deferred.reject(res);
       });
-    },function(response){
-      var deferred = $q.defer();
-      deferred.reject(response);
-    });
+
     return deferred.promise;
   };
 

@@ -68,27 +68,28 @@ function APIClientService($http, $q, $timeout, basicURL) {
       });
       deferred.resolve(events);
     }, function (response) {
-      // TODO: show error in popup window
       deferred.reject(response);
     });
     return deferred.promise;
   };
+  
   APIClient.prototype.Connect = function () {
     var self = this;
     var deferred = $q.defer();
     self.getToken().then(function (response) {
-      self.getAllEvents().then(function (res) {
-        deferred.resolve(res);
-        $timeout(function () {
-          self.observable.onNext('events');
-        });
-      }, function (res) {
-        deferred.reject(res);
-      });
+      return self.getAllEvents();
     }, function (response) {
       var deferred = $q.defer();
       deferred.reject(response);
+    }).then(function (response) {
+      deferred.resolve(response);
+      $timeout(function () {
+        self.observable.onNext('events');
+      });
+    }, function (response) {
+      deferred.reject(response);
     });
+    
     return deferred.promise;
   };
 

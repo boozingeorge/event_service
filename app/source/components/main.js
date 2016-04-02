@@ -1,8 +1,8 @@
 EventService.component('main', {
   template:'<map events="$ctrl.events"></map>' +
   '<div class="tools" layot="row">' +
-  '<menu events="$ctrl.events" callofchild="$ctrl.callofchild"></menu>'+
-  '<cards events="$ctrl.events" callofchild="$ctrl.callofchild"></cards>'+
+  '<menu events="$ctrl.events"></menu>'+
+  '<cards events="$ctrl.events"></cards>'+
   '</div>',
   transclude: false,
   controller:MainController
@@ -10,7 +10,6 @@ EventService.component('main', {
 function MainController($scope, $element, $attrs, $http, APIClient, basicURL){
   var ctrl = this;
   ctrl.events = [];
-  ctrl.callofchild = {};
 
   APIClient.observable.subscribe(function(x) {
     console.log('onNext main: %s', x)

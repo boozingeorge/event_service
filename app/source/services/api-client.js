@@ -52,8 +52,8 @@ function APIClientService($http, $q, $timeout, basicURL) {
     self.getToken().then(function (response) {
       return $http({
         method: 'GET',
-        url: basicURL + '/api/event.get?access_token=' + self._token
-      })
+        url: basicURL + '/api/event.get?access_token=' + self._token.value
+      });
     }, function (response) {
       deferred.reject(response);
     }).then(function (response) {
@@ -76,7 +76,30 @@ function APIClientService($http, $q, $timeout, basicURL) {
     });
     return deferred.promise;
   };
-
+  
+  APIClient.prototype.getProfile = function () {
+    var self = this;
+    var deferred = $q.defer();
+    self.getToken().then(function (response) {
+      return $http({
+        method: 'GET',
+        url: basicURL + '/api/user.getById?access_token=' + self._token.value
+      });
+    }, function (response) {
+      deferred.reject(response);
+    }).then(function (response) {
+      deferred.resolve({
+        id: response.data.response.id,
+        firstName: response.data.response.first_name,
+        lastName: response.data.response.last_name,
+        avatar: response.data.response.avatar
+      });
+    }, function (response) {
+      deferred.reject(response);
+    });
+    return deferred.promise;
+  };
+  
   APIClient.prototype.Connect = function () {
     var self = this;
     var deferred = $q.defer();

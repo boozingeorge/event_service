@@ -50,6 +50,7 @@ angular.module('EventService').run(['$templateCache', function($templateCache) {
     "<map events=\"$ctrl.events\"></map>\n" +
     "<div class=\"tools\" layot=\"row\">\n" +
     "  <menu events=\"$ctrl.events\"></menu>\n" +
+    "  <profile></profile>\n" +
     "  <cards events=\"$ctrl.events\"></cards>\n" +
     "</div>\n"
   );
@@ -72,6 +73,24 @@ angular.module('EventService').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/profile.html',
+    "<md-card id=\"profile\" style=\"position: relative\" flex=\"100\">\n" +
+    "    <md-card-title>\n" +
+    "    <md-card-title-text>\n" +
+    "      <span class=\"md-headline\">{{$ctrl.firstName}} {{$ctrl.lastName}}</span>\n" +
+    "      <span class=\"md-subhead\">VK</span>\n" +
+    "    </md-card-title-text>\n" +
+    "    <md-card-title-media>\n" +
+    "      <div class=\"md-media-sm card-media\"><img src=\"{{$ctrl.avatar}}\" alt=\"{{$ctrl.firstName}} {{$ctrl.lastName}}\"></div>\n" +
+    "    </md-card-title-media>\n" +
+    "  </md-card-title>\n" +
+    "  <md-card-actions layout=\"row\" layout-align=\"start center\">\n" +
+    "    <md-button>Мои события</md-button>\n" +
+    "  </md-card-actions>\n" +
+    "</md-card>"
+  );
+
+
   $templateCache.put('templates/search.html',
     "<form id=\"search\" ng-submit=\"$event.preventDefault()\">\n" +
     "  <md-autocomplete ng-disabled=\"$ctrl.isDisabled\" md-no-cache=\"$ctrl.noCache\" md-selected-item=\"$ctrl.selectedItem\"\n" +
@@ -87,7 +106,6 @@ angular.module('EventService').run(['$templateCache', function($templateCache) {
     "    </md-item-template>\n" +
     "    <md-not-found>\n" +
     "      Не найдено \"{{$ctrl.searchText}}\"\n" +
-    "      <!--<a ng-click=\"$ctrl.newEvent($ctrl.searchText)\">Создать событие</a>-->\n" +
     "    </md-not-found>\n" +
     "  </md-autocomplete>\n" +
     "</form>\n"

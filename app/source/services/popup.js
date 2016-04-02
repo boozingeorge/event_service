@@ -18,8 +18,8 @@ function PopUpService($mdDialog, $window) {
         .ariaLabel('Connect Error')
         .ok('OK')
     ).then(function(){
-        $window.location.href = self._url + "/logout";
-      });
+      $window.location.href = self._url + "/logout";
+    });
   };
 
   return new PopUp();

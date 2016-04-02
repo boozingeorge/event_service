@@ -1,9 +1,9 @@
-function MapController($scope, $compile, APIClient){
+function MapController($scope, $compile, APIClient, geoPoint){
   var ctrl = this;
 
   var mapOptions = {
     zoom: 14,
-    center: new google.maps.LatLng(54.993437, 73.365768),
+    center: new google.maps.LatLng(geoPoint.lat, geoPoint.long),
     mapTypeId: google.maps.MapTypeId.TERRAIN,
     mapTypeControl:false,
     streetViewControl: false,

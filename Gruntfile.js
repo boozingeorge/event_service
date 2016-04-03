@@ -23,11 +23,17 @@ module.exports = function(grunt) {
           prefix: 'templates/'
         }
       }
-    }
+    },
+    watch: {
+      dev: {
+        files: ['app/source/templates/**/*.html'],
+        tasks: ['ngtemplates']
+      }
+    },
   });
 
   grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-angular-templates');
-  grunt.registerTask('default', ['bower']);
-  grunt.registerTask('dev', ['ngtemplates']);
+  grunt.registerTask('default', ['bower', 'ngtemplates']);
 };

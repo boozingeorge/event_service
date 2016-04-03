@@ -5,3 +5,4 @@ bower/
 nbproject/
 .vagrant/
 config/config.json
+app/source/templates/templates.js

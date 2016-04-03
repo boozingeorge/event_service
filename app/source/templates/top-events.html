@@ -10,6 +10,6 @@
   </md-card-title>
   <md-card-actions layout="row" layout-align="end center">
     <md-button>Подробнее</md-button>
-    <md-button>Пойду</md-button>
+    <md-button ng-click="$ctrl.toggleSubscribe(event)">{{ event.membersAmount }}<md-icon md-svg-src="svg/ic_people_48px.svg"></md-icon></md-button>
   </md-card-actions>
 </md-card>

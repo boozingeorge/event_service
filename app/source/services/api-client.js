@@ -24,7 +24,7 @@ function APIClientService($http, $q, basicURL) {
           timestamp: new Date().getTime()
         };
         deferred.resolve(response.data.token);
-      }, function (response) {
+      }).catch(function (response) {
         deferred.reject(response);
       });
       
@@ -61,7 +61,7 @@ function APIClientService($http, $q, basicURL) {
           id: event.id,
           beginAt: event.begin_at,
           endAt: event.end_at,
-          members_amount: event.members_amount,
+          membersAmount: event.members_amount,
           title: event.title,
           description: event.description,
           lat: event.lat,
@@ -93,6 +93,50 @@ function APIClientService($http, $q, basicURL) {
         lastName: response.data.response.last_name,
         avatar: response.data.response.avatar
       });
+    }, function (response) {
+      deferred.reject(response);
+    });
+    return deferred.promise;
+  };
+  
+  APIClient.prototype.joinToEvent = function (id) {
+    var self = this;
+    var deferred = $q.defer();
+    self.getToken().then(function (response) {
+      return $http({
+        method: 'POST',
+        url: basicURL + '/api/event.join',
+        data: 'id=' + id + '&access_token=' + self._token.value,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+    }, function (response) {
+      deferred.reject(response);
+    }).then(function (response) {
+      deferred.resolve((response.data.error) ? true : false);
+    }, function (response) {
+      deferred.reject(response);
+    });
+    return deferred.promise;
+  };
+  
+  APIClient.prototype.leaveEvent = function (id) {
+    var self = this;
+    var deferred = $q.defer();
+    self.getToken().then(function (response) {
+      return $http({
+        method: 'POST',
+        url: basicURL + '/api/event.leave',
+        data: 'id=' + id + '&access_token=' + self._token.value,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+    }, function (response) {
+      deferred.reject(response);
+    }).then(function (response) {
+      deferred.resolve((response.data.error) ? false : true);
     }, function (response) {
       deferred.reject(response);
     });

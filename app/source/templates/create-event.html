@@ -1,0 +1,36 @@
+<md-card id="create-event" style="position: relative" flex="100">
+  <md-content class="autoScroll" >
+    <md-input-container  class="md-icon-float md-block">
+      <!-- Use floating label instead of placeholder -->
+      <label>Изображение</label>
+      <md-icon md-svg-src="svg/ic_insert_photo_48px.svg" class="name"></md-icon>
+      <input ng-model="user.name" type="text">
+    </md-input-container>
+    <md-input-container md-no-float class="md-block">
+      <md-icon md-svg-src="svg/ic_text_format_48px.svg"></md-icon>
+      <input ng-model="user.phone" tye="text" placeholder="Название">
+    </md-input-container>
+    <md-input-container class="md-block">
+      <!-- Use floating placeholder instead of label -->
+      <md-icon md-svg-src="svg/ic_border_color_48px.svg" class="email"></md-icon>
+      <input ng-model="user.email" type="email" placeholder="Описание" ng-required="true">
+    </md-input-container>
+    <md-input-container md-no-float class="md-block">
+      <md-icon md-svg-src="svg/ic_insert_invitation_48px.svg" style="display:inline-block;"></md-icon>
+      <input ng-model="user.address" type="text" placeholder="Время" ng-required="true">
+    </md-input-container>
+    <div layout="row" layout-align="space-between start">
+      <md-input-container class="">
+        <label>Место</label>
+        <md-icon md-svg-src="svg/ic_explore_48px.svg"></md-icon>
+        <input ng-model="user.donation" type="text">
+      </md-input-container>
+      <md-button  class="md-fab md-mini md-primary" aria-label="Use Android">
+        <md-icon md-svg-src="svg/ic_edit_location_48px.svg"></md-icon>
+      </md-button>
+    </div>
+    <md-card-actions layout="row" layout-align="start center">
+      <md-button ng-click="$ctrl.SetLocation()">Cоздать</md-button>
+    </md-card-actions>
+  </md-content>
+</md-card>

@@ -1,9 +1,10 @@
 EventService.component('main', {
   templateUrl: 'templates/main.html',
   transclude: false,
-  controller:MainController
+  controller: MainController
 });
-function MainController(APIClient, PopUp){
+
+function MainController ($timeout, APIClient, PopUp, RxSubject) {
   var ctrl = this;
   ctrl.events = [];
   ctrl.cards = {
@@ -11,16 +12,12 @@ function MainController(APIClient, PopUp){
     profile: false,
     createEvent: false
   };
-  APIClient.observable.subscribe(function(x) {
-    //TODO: handler for change
-  },function(e){
-    //TODO: handler for error
-  },function(){
-    //TODO: handler for complete
+  APIClient.getAllEvents().then(function (events) {
+    ctrl.events = events;
+    $timeout(function () {
+      RxSubject.onNext('events');
+    });
+  }).catch(function (err) {
+    PopUp.Error();
   });
-  APIClient.Connect().then(function(response){
-    ctrl.events = response;
-  }, function(response){
-    PopUp.ConnectError();
-  });
-}
+};

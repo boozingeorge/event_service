@@ -7,15 +7,18 @@ function PopUpService($mdDialog, $window) {
     self._url =  "http://" + $window.location.host;
   }
 
-  PopUp.prototype.ConnectError = function() {
+  PopUp.prototype.Error = function(content, title, areaLabel) {
     var self = this;
-
+    var content = content || 'Извините, произошла ошибка';
+    var title = title || 'Ошибка';
+    var areaLabel = areaLabel || 'Error';
+    
     $mdDialog.show(
       $mdDialog.alert()
         .clickOutsideToClose(true)
-        .title('Ошибка')
-        .textContent('Извините, произошла ошибка')
-        .ariaLabel('Connect Error')
+        .title(title)
+        .textContent(content)
+        .ariaLabel(areaLabel)
         .ok('OK')
     ).then(function(){
       $window.location.href = self._url + "/logout";

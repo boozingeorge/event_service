@@ -1,4 +1,4 @@
-function MapController($scope, $compile, APIClient, geoPoint){
+function MapController($scope, $compile, RxSubject, geoPoint){
   var ctrl = this;
 
   var mapOptions = {
@@ -22,15 +22,11 @@ function MapController($scope, $compile, APIClient, geoPoint){
     e.preventDefault();
     google.maps.event.trigger(selectedMarker, 'click');
   };
-
-  APIClient.observable.subscribe(function(x) {
-    if(x == 'events'){
+  
+  RxSubject.subscribe(function(x) {
+    if(x === 'events'){
       CreateAllMarkers();
     }
-  },function(e){
-    //TODO: handler for error
-  },function(){
-    //TODO: handler for complete
   });
 
   function createMarker(info){

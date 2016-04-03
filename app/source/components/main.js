@@ -6,7 +6,11 @@ EventService.component('main', {
 function MainController(APIClient, PopUp){
   var ctrl = this;
   ctrl.events = [];
-
+  ctrl.cards = {
+    topEvents: true,
+    profile: false,
+    createEvent: false
+  };
   APIClient.observable.subscribe(function(x) {
     //TODO: handler for change
   },function(e){

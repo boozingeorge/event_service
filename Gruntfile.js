@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         files: ['app/source/templates/**/*.html'],
         tasks: ['ngtemplates']
       }
-    },
+    }
   });
 
   grunt.loadNpmTasks('grunt-bower-task');

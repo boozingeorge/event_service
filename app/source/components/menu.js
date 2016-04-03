@@ -3,7 +3,8 @@ function MenuController(){
 EventService.component('menu', {
   templateUrl: 'templates/menu.html',
   bindings:{
-    events:'<'
+    events:'<',
+    cards:'='
   },
   controller:MenuController
 });

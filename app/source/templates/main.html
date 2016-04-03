@@ -1,6 +1,6 @@
 <map events="$ctrl.events"></map>
 <div class="tools" layot="row">
-  <menu events="$ctrl.events"></menu>
-  <profile></profile>
-  <cards events="$ctrl.events"></cards>
+  <menu events="$ctrl.events" cards="$ctrl.cards"></menu>
+  <profile ng-show="$ctrl.cards.profile"></profile>
+  <top-events events="$ctrl.events" ng-show="$ctrl.cards.topEvents"></top-events>
 </div>

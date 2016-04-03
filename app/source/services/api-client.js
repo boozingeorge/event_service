@@ -1,12 +1,11 @@
 EventService.factory('APIClient', APIClientService);
 
-function APIClientService($http, $q, $timeout, basicURL) {
+function APIClientService($http, $q, basicURL) {
 
   function APIClient() {
     var self = this;
     self._basicURL = basicURL;
     self._token = null;
-    self.observable = new Rx.Subject();
   }
 
   APIClient.prototype.getToken = function () {
@@ -60,8 +59,8 @@ function APIClientService($http, $q, $timeout, basicURL) {
       var events = response.data.response.map(function (event) {
         return {
           id: event.id,
-          begin_at: event.begin_at,
-          end_at: event.end_at,
+          beginAt: event.begin_at,
+          endAt: event.end_at,
           members_amount: event.members_amount,
           title: event.title,
           description: event.description,
@@ -100,19 +99,5 @@ function APIClientService($http, $q, $timeout, basicURL) {
     return deferred.promise;
   };
   
-  APIClient.prototype.Connect = function () {
-    var self = this;
-    var deferred = $q.defer();
-    self.getAllEvents().then(function (response) {
-      deferred.resolve(response);
-      $timeout(function () {
-        self.observable.onNext('events');
-      });
-    }, function (response) {
-      deferred.reject(response);
-    });
-    return deferred.promise;
-  };
-
   return new APIClient();
 }

@@ -17,8 +17,8 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~1.11.3",
     "angular": "^1.5.0",
-    "angular-material": "^1.0.6"
+    "angular-material": "^1.0.6",
+    "rx-angular": "angular-rx#^1.1.3"
   }
 }

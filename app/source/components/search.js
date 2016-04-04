@@ -1,4 +1,4 @@
-function SearchController($timeout, $q, APIClient) {
+function SearchController($timeout, $q, RxSubject) {
 
   var ctrl = this;
   ctrl.simulateQuery = false;
@@ -43,7 +43,7 @@ function SearchController($timeout, $q, APIClient) {
       for (var i = 0; i < 10; i++) {
         results[i] = {
           title: ctrl.events[i].title
-        }
+        };
       }
       return results;
     }
@@ -55,15 +55,11 @@ function SearchController($timeout, $q, APIClient) {
       return (event.title.toLowerCase().indexOf(lowercaseQuery) === 0);
     };
   }
-
-  APIClient.observable.subscribe(function(x) {
-    if(x == 'events'){
+  
+  RxSubject.subscribe(function(x) {
+    if(x === 'events'){
       ctrl.firstView = firstView();
     }
-  },function(e){
-    //TODO: handler for error
-  },function(){
-    //TODO: handler for complete
   });
 }
 

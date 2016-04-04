@@ -1,13 +1,9 @@
-function MapController($scope, $compile, APIClient, geoPoint, GoogleMap){
+function MapController($scope, $compile, RxSubject, geoPoint){
   var ctrl = this;
-  APIClient.observable.subscribe(function(x) {
-    if(x == 'events'){
-      GoogleMap.CreateAllMarkers(ctrl.events);
+  RxSubject.subscribe(function(x) {
+    if(x === 'events'){
+      CreateAllMarkers();
     }
-  },function(e){
-    //TODO: handler for error
-  },function(){
-    //TODO: handler for complete
   });
 }
 EventService.component('map', {

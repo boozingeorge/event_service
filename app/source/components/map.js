@@ -1,8 +1,8 @@
-function MapController($scope, $compile, RxSubject, geoPoint){
+function MapController($scope, $compile, RxSubject, GoogleMap){
   var ctrl = this;
   RxSubject.subscribe(function(x) {
     if(x === 'events'){
-      CreateAllMarkers();
+      GoogleMap.CreateAllMarkers(ctrl.events);
     }
   });
 }

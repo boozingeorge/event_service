@@ -49,6 +49,9 @@ a {
   height:100%;
 
 }
+.content-in-card{
+  margin: 14px 14px 0 14px;
+}
 #repeat{
   display: inline;
 }

@@ -1,5 +1,5 @@
 <md-card id="create-event" style="position: relative" flex="100">
-  <md-content class="autoScroll" >
+  <md-content class="autoScroll content-in-card" >
     <md-input-container  class="md-icon-float md-block">
       <!-- Use floating label instead of placeholder -->
       <label>Изображение</label>
@@ -25,12 +25,12 @@
         <md-icon md-svg-src="svg/ic_explore_48px.svg"></md-icon>
         <input ng-model="user.donation" type="text">
       </md-input-container>
-      <md-button  class="md-fab md-mini md-primary" aria-label="Use Android">
+      <md-button ng-click="$ctrl.SetLocation()" class="md-fab md-mini md-primary" aria-label="Set Location">
         <md-icon md-svg-src="svg/ic_edit_location_48px.svg"></md-icon>
       </md-button>
     </div>
     <md-card-actions layout="row" layout-align="start center">
-      <md-button ng-click="$ctrl.SetLocation()">Cоздать</md-button>
+      <md-button>Cоздать</md-button>
     </md-card-actions>
   </md-content>
 </md-card>

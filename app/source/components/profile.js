@@ -1,4 +1,4 @@
-function ProfileController(RxSubject) {
+function ProfileController() {
   var ctrl = this;
 }
 EventService.component('profile', {

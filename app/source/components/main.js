@@ -4,7 +4,7 @@ EventService.component('main', {
   controller: MainController
 });
 
-function MainController ($timeout, APIClient, PopUp, RxSubject) {
+function MainController ($timeout, APIClient, PopUp, Emitter) {
   var ctrl = this;
   
   ctrl.cards = {
@@ -17,7 +17,7 @@ function MainController ($timeout, APIClient, PopUp, RxSubject) {
   APIClient.getAllEvents().then(function (events) {
     ctrl.events = events;
     $timeout(function () {
-      RxSubject.onNext('eventsload');
+      Emitter.emit('eventsload');
     });
   }).catch(function (err) {
     PopUp.Error();
@@ -33,7 +33,7 @@ function MainController ($timeout, APIClient, PopUp, RxSubject) {
     };
     
     $timeout(function () {
-      RxSubject.onNext('userload');
+      Emitter.emit('userload');
     });
   }).catch(function(err){
     PopUp.ConnectError();

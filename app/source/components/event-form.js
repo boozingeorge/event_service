@@ -1,4 +1,4 @@
-function CreateEventController(GoogleMap, $timeout) {
+function EventFormController(GoogleMap, $timeout) {
 
   var ctrl = this;
   ctrl.location = {
@@ -64,9 +64,9 @@ function CreateEventController(GoogleMap, $timeout) {
 }
 
 EventService.component('createEvent', {
-  templateUrl: 'templates/create-event.html',
+  templateUrl: 'templates/event-form.html',
   bindings: {
     cards: '='
   },
-  controller: CreateEventController
+  controller: EventFormController
 });

@@ -22,13 +22,11 @@ function MapController($scope, $compile, RxSubject, geoPoint){
     e.preventDefault();
     google.maps.event.trigger(selectedMarker, 'click');
   };
-  
-  RxSubject.subscribe(function(x) {
-    if(x === 'events'){
-      CreateAllMarkers();
-    }
-  });
 
+  RxSubject.on('eventsload', function () {
+    CreateAllMarkers();
+  });
+  
   function createMarker(info){
 
     var marker = new google.maps.Marker({

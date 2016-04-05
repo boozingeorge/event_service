@@ -1,4 +1,4 @@
-function CreateEventController(GoogleMap) {
+function CreateEventController(GoogleMap, $timeout) {
 
   var ctrl = this;
   ctrl.location = {
@@ -6,10 +6,44 @@ function CreateEventController(GoogleMap) {
     long: null
   };
 
+  ctrl.nowDate = new Date();
+  ctrl.startDate = {
+    date : ctrl.nowDate,
+    minDate :new Date(
+      ctrl.nowDate.getFullYear(),
+      ctrl.nowDate.getMonth(),
+      ctrl.nowDate.getDate()
+    ),
+    maxDate : new Date(
+      ctrl.nowDate.getFullYear(),
+      ctrl.nowDate.getMonth() + 2,
+      ctrl.nowDate.getDate()
+    ),
+    hour: 12,
+    minute: 30
+  };
+  ctrl.finishDate = {
+    date : ctrl.nowDate,
+    minDate :new Date(
+      ctrl.nowDate.getFullYear(),
+      ctrl.nowDate.getMonth(),
+      ctrl.nowDate.getDate()
+    ),
+    maxDate : new Date(
+      ctrl.nowDate.getFullYear(),
+      ctrl.nowDate.getMonth() + 2,
+      ctrl.nowDate.getDate()
+    ),
+    hour: 13,
+    minute: 30
+  };
+
   ctrl.SetLocation = function () {
     var locationOnClick = google.maps.event.addListener(GoogleMap.map, 'click', function (event) {
-      ctrl.location.lat = event.latLng.lat();
-      ctrl.location.long = event.latLng.lng();
+      $timeout(function(){
+        ctrl.location.lat = event.latLng.lat();
+        ctrl.location.long = event.latLng.lng();
+      });
       console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
       locationOnClick.remove();
     });

@@ -6,6 +6,9 @@ EventService.component('main', {
 
 function MainController ($timeout, APIClient, PopUp, RxSubject) {
   var ctrl = this;
+  angular.element(document.querySelector('main')).ready(function () {
+    angular.element(document.getElementById("preloader")).css('zIndex','0').css('display', 'none');
+  });
   ctrl.events = [];
   ctrl.cards = {
     topEvents: true,

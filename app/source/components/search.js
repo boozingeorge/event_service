@@ -1,4 +1,4 @@
-function SearchController($timeout, $q, RxSubject) {
+function SearchController($timeout, $q, Emitter) {
 
   var ctrl = this;
   ctrl.simulateQuery = false;
@@ -56,10 +56,8 @@ function SearchController($timeout, $q, RxSubject) {
     };
   }
   
-  RxSubject.subscribe(function(x) {
-    if(x === 'events'){
-      ctrl.firstView = firstView();
-    }
+  Emitter.listen('eventsload', function () {
+    ctrl.firstView = firstView();
   });
 }
 

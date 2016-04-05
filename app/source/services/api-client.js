@@ -91,7 +91,8 @@ function APIClientService($http, $q, basicURL) {
         id: response.data.response.id,
         firstName: response.data.response.first_name,
         lastName: response.data.response.last_name,
-        avatar: response.data.response.avatar
+        avatar: response.data.response.avatar,
+        events: response.data.response.events
       });
     }, function (response) {
       deferred.reject(response);

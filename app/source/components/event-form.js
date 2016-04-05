@@ -63,7 +63,7 @@ function EventFormController(GoogleMap, $timeout) {
   }
 }
 
-EventService.component('createEvent', {
+EventService.component('eventForm', {
   templateUrl: 'templates/event-form.html',
   bindings: {
     cards: '='

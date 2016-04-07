@@ -19,11 +19,11 @@ function EventFormController(GoogleMap, $timeout, $scope) {
   ctrl.changeStartHour = function(newValue){
     ctrl.startDate.date.setHours(newValue);
     if(ctrl.startDate.date > ctrl.finishDate.date){
-      ctrl.failDate = true;
-      $scope.eventForm.$setValidity("prop", false);
+      ctrl.eventForm.hour.$error.validationError = true;
+      ctrl.eventForm.$invalid =  true;
     }else{
-      ctrl.failDate = false;
-      $scope.eventForm.$setValidity("prop", true);
+      ctrl.eventForm.$invalid =  false;
+      ctrl.eventForm.hour.$error.validationError = false;
     }
   };
   ctrl.SetLocation = function () {

@@ -1,65 +1,56 @@
-function EventFormController(GoogleMap, $timeout) {
+function EventFormController(GoogleMap, $timeout, $scope) {
 
   var ctrl = this;
-  ctrl.location = {
-    lat: null,
-    long: null
+  ctrl.event = {
+    title:'',
+    description:'',
+    picture: '',
+    location: {
+      lat: null,
+      long: null
+    }
   };
+  ctrl.viewLocation = '';
 
-  ctrl.nowDate = new Date();
-  ctrl.startDate = {
-    date : ctrl.nowDate,
-    minDate :new Date(
-      ctrl.nowDate.getFullYear(),
-      ctrl.nowDate.getMonth(),
-      ctrl.nowDate.getDate()
-    ),
-    maxDate : new Date(
-      ctrl.nowDate.getFullYear(),
-      ctrl.nowDate.getMonth() + 2,
-      ctrl.nowDate.getDate()
-    ),
-    hour: 12,
-    minute: 30
+  var nowDate = new Date();
+  ctrl.startDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours()));
+  ctrl.finishDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours() + 1));
+  ctrl.failDate = false;
+  ctrl.changeStartHour = function(newValue){
+    ctrl.startDate.date.setHours(newValue);
+    if(ctrl.startDate.date > ctrl.finishDate.date){
+      ctrl.failDate = true;
+      $scope.eventForm.$setValidity("prop", false);
+    }else{
+      ctrl.failDate = false;
+      $scope.eventForm.$setValidity("prop", true);
+    }
   };
-  ctrl.finishDate = {
-    date : ctrl.nowDate,
-    minDate :new Date(
-      ctrl.nowDate.getFullYear(),
-      ctrl.nowDate.getMonth(),
-      ctrl.nowDate.getDate()
-    ),
-    maxDate : new Date(
-      ctrl.nowDate.getFullYear(),
-      ctrl.nowDate.getMonth() + 2,
-      ctrl.nowDate.getDate()
-    ),
-    hour: 13,
-    minute: 30
-  };
-
   ctrl.SetLocation = function () {
     var locationOnClick = google.maps.event.addListener(GoogleMap.map, 'click', function (event) {
       $timeout(function(){
-        ctrl.location.lat = event.latLng.lat();
-        ctrl.location.long = event.latLng.lng();
+        ctrl.event.location.lat = event.latLng.lat();
+        ctrl.event.location.long = event.latLng.lng();
+        ctrl.viewLocation = event.latLng.lat().toFixed(3) + ', ' + event.latLng.lng().toFixed(3);
       });
       console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
       locationOnClick.remove();
     });
   };
-
-  function Event(event) {
+  ctrl.createEvent = function(){
+    console.log(ctrl.event);
+  };
+  function DateEvent(date){
     var self = this;
-    self.id = event.id;
-    self.begin_at = event.begin_at;
-    self.end_at = event.end_at;
-    self.members_amount = event.members_amount;
-    self.title = event.title;
-    self.description = event.description;
-    self.lat = event.lat;
-    self.long = event.long;
-    self.picture = event.picture;
+    self.hour = date.getHours();
+    self.minute = date.getMinutes();
+    self.date = date;
+    self.minDate =date;
+    self.maxDate =  new Date(
+      date.getFullYear(),
+      date.getMonth() + 2,
+      date.getDate()
+    );
   }
 }
 
@@ -69,4 +60,17 @@ EventService.component('eventForm', {
     cards: '='
   },
   controller: EventFormController
+});
+EventService.directive("odd", function() {
+  return {
+    restrict: "A",
+
+    require: "ngModel",
+
+    link: function(scope, element, attributes, ngModel) {
+      ngModel.$validators.odd = function(modelValue) {
+        return modelValue % 2 === 1;
+      }
+    }
+  };
 });

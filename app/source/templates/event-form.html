@@ -1,4 +1,6 @@
+
 <md-card id="event-form" style="position: relative" flex="100">
+
   <md-content class="autoScroll">
     <form name="$ctrl.eventForm" ng-submit="$ctrl.createEvent()">
     <md-input-container md-no-float class="md-block content-in-card">
@@ -21,9 +23,9 @@
                      md-min-date="$ctrl.startDate.minDate" md-max-date="$ctrl.startDate.maxDate"></md-datepicker>
       <div layout="row" layout-align="end center" style="margin: 0 0 0 14px">
       <md-input-container style="height: 33px">
-      <input name="hour" ng-model="$ctrl.startDate.hour" aria-label="Start hour" type="number" min= "0" max="23" step="1" ng-change="$ctrl.changeStartHour($ctrl.startDate.hour)">
+      <input date-validation  start-date="$ctrl.startDate" finish-date="$ctrl.finishDate" name="hour" ng-model-options="{ getterSetter: true }" ng-model="$ctrl.startDate.hour" aria-label="Start hour" type="number" min= "0" max="23" step="1">
         <div ng-messages="$ctrl.eventForm.hour.$error">
-          <div ng-message="validationError">this is the error</div>
+          <div ng-message="dateValidation">this is the error</div>
         </div>
       </md-input-container>
       <md-input-container style="height: 33px">
@@ -36,7 +38,7 @@
                      md-min-date="$ctrl.finishDate.minDate" md-max-date="$ctrl.finishDate.maxDate"></md-datepicker>
       <div layout="row" layout-align="end center" style="margin: 0 0 0 14px">
         <md-input-container style="height: 33px">
-          <input ng-model="$ctrl.finishDate.hour" aria-label="Finish hour" type="number" min= "0" max="23" step="1">
+          <input ng-model="$ctrl.finishDate.hour" ng-model-options="{ getterSetter: true }" aria-label="Finish hour" type="number" min= "0" max="23" step="1">
         </md-input-container>
         <md-input-container style="height: 33px">
           <input ng-model="$ctrl.finishDate.minute" aria-label="Finish minute" type="number" min= "0" max="59" step="5">

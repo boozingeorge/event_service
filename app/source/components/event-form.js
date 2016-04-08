@@ -16,13 +16,17 @@ function EventFormController(GoogleMap, $timeout, $scope) {
   ctrl.startDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours()));
   ctrl.finishDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours() + 1));
   ctrl.failDate = false;
+  console.log('in ctrl');
+  //console.log(ctrl.startDate.hour);
+
+
   ctrl.changeStartHour = function(newValue){
     ctrl.startDate.date.setHours(newValue);
     if(ctrl.startDate.date > ctrl.finishDate.date){
       ctrl.eventForm.hour.$error.validationError = true;
-      ctrl.eventForm.$invalid =  true;
+      //ctrl.eventForm.$invalid =  true;
     }else{
-      ctrl.eventForm.$invalid =  false;
+      //ctrl.eventForm.$invalid =  false;
       ctrl.eventForm.hour.$error.validationError = false;
     }
   };
@@ -42,7 +46,6 @@ function EventFormController(GoogleMap, $timeout, $scope) {
   };
   function DateEvent(date){
     var self = this;
-    self.hour = date.getHours();
     self.minute = date.getMinutes();
     self.date = date;
     self.minDate =date;
@@ -51,6 +54,18 @@ function EventFormController(GoogleMap, $timeout, $scope) {
       date.getMonth() + 2,
       date.getDate()
     );
+    self.hour = function(value){
+      return arguments.length ? (this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), value)) : self.date.getHours();
+    };
+    /*Object.defineProperty(this, "hour", {
+      get: function() {
+        return this.date.getHours();
+      },
+      set: function(value){
+        console.log(value);
+        this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), value);
+      }
+    });*/
   }
 }
 
@@ -61,15 +76,29 @@ EventService.component('eventForm', {
   },
   controller: EventFormController
 });
-EventService.directive("odd", function() {
+EventService.directive("dateValidation", function() {
   return {
     restrict: "A",
 
     require: "ngModel",
+    scope:{
+      startDate: '=',
+      finishDate:'='
+    },
 
     link: function(scope, element, attributes, ngModel) {
-      ngModel.$validators.odd = function(modelValue) {
-        return modelValue % 2 === 1;
+      var self = this;
+
+     ngModel.$validators.dateValidation = function(modelValue) {
+       console.log(scope);
+        /*if(scope.startDate.date >= scope.finishDate.date){
+          scope.startDate.hour(0);
+          //return false;
+          return true;
+        }else{
+          console.log('true');*/
+          return true;
+        //}
       }
     }
   };

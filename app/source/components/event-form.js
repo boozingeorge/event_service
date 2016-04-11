@@ -16,18 +16,17 @@ function EventFormController(GoogleMap, $timeout, $scope) {
   ctrl.startDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours()));
   ctrl.finishDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours() + 1));
   ctrl.failDate = false;
-  console.log('in ctrl');
-  //console.log(ctrl.startDate.hour);
-
 
   ctrl.changeStartHour = function(newValue){
     ctrl.startDate.date.setHours(newValue);
     if(ctrl.startDate.date > ctrl.finishDate.date){
-      ctrl.eventForm.hour.$error.validationError = true;
+      ctrl.eventForm.$setValidity('aga', false);
+      //ctrl.eventForm.hour.$error.validationError = true;
       //ctrl.eventForm.$invalid =  true;
     }else{
+      ctrl.eventForm.$setValidity('aga', false);
       //ctrl.eventForm.$invalid =  false;
-      ctrl.eventForm.hour.$error.validationError = false;
+      //ctrl.eventForm.hour.$error.validationError = false;
     }
   };
   ctrl.SetLocation = function () {
@@ -76,7 +75,7 @@ EventService.component('eventForm', {
   },
   controller: EventFormController
 });
-EventService.directive("dateValidation", function() {
+EventService.directive("validStartHour", function() {
   return {
     restrict: "A",
 
@@ -88,18 +87,52 @@ EventService.directive("dateValidation", function() {
 
     link: function(scope, element, attributes, ngModel) {
       var self = this;
-
-     ngModel.$validators.dateValidation = function(modelValue) {
-       console.log(scope);
-        /*if(scope.startDate.date >= scope.finishDate.date){
-          scope.startDate.hour(0);
-          //return false;
-          return true;
+      ngModel.$parsers.unshift(function(viewValue){
+        scope.startDate.hour(viewValue);
+        if(scope.startDate.date >= scope.finishDate.date){
+          ngModel.$setValidity('startHour', false);
+          console.log('start - false');
+          return viewValue;
         }else{
-          console.log('true');*/
-          return true;
-        //}
+          ngModel.$setValidity('startHour', true);
+          console.log('start - true');
+          return viewValue;
+        }
+      });
+    }
+  };
+});
+
+EventService.directive("validFinishHour", function() {
+  return {
+    restrict: "A",
+
+    require: "ngModel",
+    scope:{
+      startDate: '=',
+      finishDate:'='
+    },
+
+    link: function(scope, element, attributes, ngModel) {
+      var self = this;
+      ngModel.$parsers.unshift(validate);
+      attributes.$observe('startDate', function(comparisonModel){
+        // Whenever the comparison model changes we'll re-validate
+        return validate(ngModel.$viewValue);
+      });
+      function validate(viewValue){
+        scope.finishDate.hour(viewValue);
+        if(scope.startDate.date >= scope.finishDate.date){
+          ngModel.$setValidity('finishHour', false);
+          console.log('finish - false');
+          return viewValue;
+        }else{
+          ngModel.$setValidity('finishHour', true);
+          console.log('finish - true');
+          return viewValue;
+        }
       }
     }
   };
 });
+

@@ -9,69 +9,59 @@ main{
   padding:0;
   position: relative;
 }
+a {
+  text-decoration: none;
+}
+.tools{
+  width: 340px;
+  padding: 72px 8px 8px 8px;
+}
+.tools md-card {
+  margin: 0 0 8px;
+}
 map{
   height:100%;
   top:0;
   bottom: 0;
   right: 0;
   left:0;
-  position: absolute;
-}
-menu{
-  padding: 0;
-  margin: 8px 0 0 0;
-}
-burger{
-}
-
-#burger-toolbar{
-}
-#burger-grid{
-  width: 70px;
-  margin: 0 0 0 8px;
-}
-#search-grid{
-  margin: 0 8px 0 0;
-  min-width: 250px;
-  width: 100%;
-}
-#search{
-
-}
-.tools{
-  width:340px;
-}
-a {
-  text-decoration: none;
+  position: fixed;
 }
 #map{
   width:100%;
   height:100%;
-
 }
-#repeat{
-  display: inline;
+burger-menu md-fab-trigger button.md-button {
+  margin: 8px;   
+} 
+burger-menu {
+  left: 8px;
+  top: 0;
+  position: fixed;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  pointer-events: none;
+  z-index: 100;
+  width: inherit;
 }
-#country_container {
-  width: 1000px;
-  margin: 13px 3px 3px 0px;
-  text-align: center;
-  width: 85px;
-  padding: 4px;
-  display: inline-table;
-  color: white;
-  background-color: black;
-  font-size: 12px;
-  cursor: pointer;
-  border: 1px solid black;
-  border-radius:13px;
+burger-menu md-fab-toolbar {
+  width: 100%;
 }
-#country_container:hover {
-  box-shadow: 0px 0px 10px black;
-  background-color: gray;
-  border: 1px solid gray;
-  cursor: pointer;
+burger-menu md-fab-toolbar .md-fab-toolbar-wrapper {
+  height: 72px;
 }
-#names {
-  cursor: pointer;
+burger-menu md-fab-toolbar .md-fab-toolbar-content {
+  height: 72px;
+}
+burger-menu button {
+  pointer-events: all;
+}
+search form {
+  padding-left: 80px
+}
+.search-wrapper {
+  position: absolute;
+  top: 15px;
+  width: inherit;
 }

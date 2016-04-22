@@ -10,6 +10,7 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
   // TODO: Please check this code
   angular.element(document.querySelector('main')).ready(function () {
     angular.element(document.getElementById("preloader")).css('zIndex','0').css('display', 'none');
+    angular.element(document.getElementsByClassName("tools")).css('display', 'block');
   });
   
   // TODO: We need find a more elegance solution to show/hide panels

@@ -7,15 +7,7 @@ function BurgerController() {
     count: 1,
     direction: 'right'
   };
-  
-  // TODO: Please check this code
-  angular.element(document.querySelector('search')).ready(function () {
-    var searchElem = document.querySelector('#search');
-    var burgerWidth = angular.element(searchElem).prop('offsetWidth') +
-      searchElem.getBoundingClientRect().left - document.querySelector('#burger-grid').getBoundingClientRect().left;
-    angular.element(document.querySelector('#burger-toolbar')).css('width', burgerWidth + 'px');
-  });
-  
+ 
   ctrl.clickShowEventForm = function () {
     ctrl.cards.eventForm = true;
     ctrl.cards.topEvents = false;
@@ -35,10 +27,10 @@ function BurgerController() {
   };
 }
 
-EventService.component('burger', {
-  templateUrl: 'templates/burger.html',
-  bindings: {
-    cards: '='
+EventService.component('burgerMenu', {
+  templateUrl: 'templates/burger-menu.html',
+  bindings:{
+    cards:'='
   },
   controller: BurgerController
 });

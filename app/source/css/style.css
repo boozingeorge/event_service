@@ -15,6 +15,7 @@ a {
 .tools{
   width: 340px;
   padding: 72px 8px 8px 8px;
+  display: none;
 }
 .tools md-card {
   margin: 0 0 8px;
@@ -30,6 +31,16 @@ map{
 #map{
   width:100%;
   height:100%;
+}
+.content-in-card{
+  margin: 14px 14px 0 14px;
+}
+#preloader{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 300;
+  background: #fff url('../../gif/preloader.gif') no-repeat 50% 50%;
 }
 burger-menu md-fab-trigger button.md-button {
   margin: 8px;   

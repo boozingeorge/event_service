@@ -11,9 +11,9 @@ function APIClientService($http, $q, basicURL) {
   APIClient.prototype.getToken = function () {
     var self = this;
     var deferred = $q.defer();
-    
+
     if (!self._token) {
-      
+
       $http({
         method: 'GET',
         url: '/api/get_access_token'
@@ -27,7 +27,7 @@ function APIClientService($http, $q, basicURL) {
       }).catch(function (response) {
         deferred.reject(response);
       });
-      
+
     } else {
       var expiresInUpdated = self._token.expires_in - Math.floor(((new Date().getTime()) - self._token.timestamp) / 1000);
       /*
@@ -75,7 +75,7 @@ function APIClientService($http, $q, basicURL) {
     });
     return deferred.promise;
   };
-  
+
   APIClient.prototype.getProfile = function () {
     var self = this;
     var deferred = $q.defer();
@@ -99,7 +99,7 @@ function APIClientService($http, $q, basicURL) {
     });
     return deferred.promise;
   };
-  
+
   APIClient.prototype.joinToEvent = function (id) {
     var self = this;
     var deferred = $q.defer();
@@ -121,7 +121,7 @@ function APIClientService($http, $q, basicURL) {
     });
     return deferred.promise;
   };
-  
+
   APIClient.prototype.leaveEvent = function (id) {
     var self = this;
     var deferred = $q.defer();
@@ -143,6 +143,26 @@ function APIClientService($http, $q, basicURL) {
     });
     return deferred.promise;
   };
-  
+
+  APIClient.prototype.createEvent = function(event){
+    var self = this;
+    var deferred = $q.defer();
+    $http({
+      method: 'POST',
+      url: basicURL + '/api/event.create',
+      data: 'begin_at=' + event.begin_at + '&end_at=' + event.end_at + '&title=' + event.title + "&description="+ event.description +
+      "&lat=" + event.location.lat + "&long=" + event.location.long + "&picture=" + event.picture + '&access_token=' + self._token.value,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).then(function(response){
+      deferred.resolve(response);
+    }, function(){
+      deferred.reject(response);
+    });
+
+    return deferred.promise;
+  };
+
   return new APIClient();
 }

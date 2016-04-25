@@ -7,21 +7,21 @@ function BurgerController() {
     count: 1,
     direction: 'right'
   };
-  
-  ctrl.clickCreateEvent = function(){
-    ctrl.cards.createEvent = true;
+ 
+  ctrl.clickShowEventForm = function () {
+    ctrl.cards.eventForm = true;
     ctrl.cards.topEvents = false;
     ctrl.cards.profile = false;
   };
 
-  ctrl.clickShowProfile = function(){
-    ctrl.cards.createEvent = false;
+  ctrl.clickShowProfile = function () {
+    ctrl.cards.eventForm = false;
     ctrl.cards.topEvents = false;
     ctrl.cards.profile = true;
   };
 
-  ctrl.clickShowTopEvents = function(){
-    ctrl.cards.createEvent = false;
+  ctrl.clickShowTopEvents = function () {
+    ctrl.cards.eventForm = false;
     ctrl.cards.topEvents = true;
     ctrl.cards.profile = false;
   };

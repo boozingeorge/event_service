@@ -7,10 +7,17 @@ EventService.component('main', {
 function MainController ($timeout, APIClient, PopUp, Emitter) {
   var ctrl = this;
   
+  // TODO: Please check this code
+  angular.element(document.querySelector('main')).ready(function () {
+    angular.element(document.getElementById("preloader")).css('zIndex','0').css('display', 'none');
+    angular.element(document.getElementsByClassName("tools")).css('display', 'block');
+  });
+  
+  // TODO: We need find a more elegance solution to show/hide panels
   ctrl.cards = {
     topEvents: true,
     profile: false,
-    createEvent: false
+    eventForm: false
   };
   
   ctrl.events = [];
@@ -24,18 +31,18 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
   });
   
   ctrl.user = {};
-  APIClient.getProfile().then(function(response){
+  APIClient.getProfile().then(function (response) {
     ctrl.user = {
       firstName: response.firstName,
       lastName: response.lastName,
       avatar: response.avatar,
       events: response.events
     };
-    
+
     $timeout(function () {
       Emitter.emit('userload');
     });
-  }).catch(function(err){
+  }).catch(function (err) {
     PopUp.ConnectError();
   });
 };

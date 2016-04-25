@@ -1,0 +1,79 @@
+
+<md-card id="event-form" style="position: relative" flex="100">
+
+  <md-content class="autoScroll">
+    <form name="$ctrl.eventForm" ng-submit="$ctrl.createEvent()">
+    <md-input-container md-no-float class="md-block content-in-card">
+      <label>Название</label>
+      <md-icon md-svg-src="svg/ic_text_format_48px.svg"></md-icon>
+      <input name="title" ng-model="$ctrl.event.title" type="text" ng-required="true">
+      <div ng-messages="$ctrl.eventForm.title.$error">
+        <div ng-message="required">Это поле обязательно.</div>
+      </div>
+    </md-input-container>
+    <md-input-container class="md-block content-in-card">
+      <md-icon md-svg-src="svg/ic_border_color_48px.svg" ></md-icon>
+      <input name="description" ng-model="$ctrl.event.description" type="text" placeholder="Описание" ng-required="true">
+      <div ng-messages="$ctrl.eventForm.description.$error">
+        <div ng-message="required">Это поле обязательно.</div>
+      </div>
+    </md-input-container>
+    <div layout="row" layout-align="space-between center" style="margin: 0 14px 0 0">
+      <md-datepicker ng-model="$ctrl.startDate.date" md-placeholder="Enter date"
+                     md-min-date="$ctrl.startDate.minDate" md-max-date="$ctrl.startDate.maxDate"></md-datepicker>
+      <div layout="row" layout-align="end center" style="margin: 0 0 0 14px">
+      <md-input-container style="height: 33px">
+      <input valid-start-hour start-date="$ctrl.startDate" finish-date="$ctrl.finishDate" name="startHour" ng-model-options="{ getterSetter: true }" ng-model="$ctrl.startDate.hour" aria-label="Start hour" type="number" min= "0" max="23" step="1">
+        <div ng-messages="$ctrl.eventForm.startHour.$error">
+          <div ng-message="startHour">Ошибка</div>
+        </div>
+      </md-input-container>
+      <md-input-container style="height: 33px">
+      <input ng-model="$ctrl.startDate.minute" aria-label="Start minute" type="number" min= "0" max="59" step="5">
+        </md-input-container>
+      </div>
+    </div>
+    <div layout="row" layout-align="space-between center" style="margin: 0 14px 0 0">
+      <md-datepicker ng-model="$ctrl.finishDate.date" md-placeholder="Enter date"
+                     md-min-date="$ctrl.finishDate.minDate" md-max-date="$ctrl.finishDate.maxDate"></md-datepicker>
+      <div layout="row" layout-align="end center" style="margin: 0 0 0 14px">
+        <md-input-container style="height: 33px">
+          <input valid-finish-hour  start-date="$ctrl.startDate" finish-date="$ctrl.finishDate" name="finishHour" ng-model="$ctrl.finishDate.hour" ng-model-options="{ getterSetter: true }" aria-label="Finish hour" type="number" min= "0" max="23" step="1">
+          <div ng-messages="$ctrl.eventForm.finishHour.$error">
+            <div ng-message="finishHour">Ошибка</div>
+          </div>
+        </md-input-container>
+        <md-input-container style="height: 33px">
+          <input ng-model="$ctrl.finishDate.minute" aria-label="Finish minute" type="number" min= "0" max="59" step="5">
+        </md-input-container>
+      </div>
+    </div>
+    <div layout="row" layout-align="space-between center" class="content-in-card">
+      <md-input-container class="md-icon-float md-block">
+        <label>Изображение</label>
+        <md-icon md-svg-src="svg/ic_insert_photo_48px.svg"></md-icon>
+        <input ng-model="$ctrl.event.picture" type="text">
+      </md-input-container>
+      <md-button class="md-fab md-mini md-primary" aria-label="Upload image">
+        <md-icon md-svg-src="svg/ic_file_upload_48px.svg"></md-icon>
+      </md-button>
+    </div>
+    <div layout="row" layout-align="space-between center" class="content-in-card">
+      <md-input-container class="">
+        <label>Место</label>
+        <md-icon md-svg-src="svg/ic_explore_48px.svg"></md-icon>
+        <input ng-model="$ctrl.viewLocation" type="text" name="location" readonly ng-required="true">
+        <div ng-messages="$ctrl.eventForm.location.$error">
+          <div ng-message="required">Это поле обязательно.</div>
+        </div>
+      </md-input-container>
+      <md-button ng-click="$ctrl.SetLocation()" class="md-fab md-mini md-primary" aria-label="Set Location">
+        <md-icon md-svg-src="svg/ic_edit_location_48px.svg"></md-icon>
+      </md-button>
+    </div>
+    <md-card-actions layout="row" layout-align="start center">
+      <md-button type="submit" class="md-primary" ng-disabled="$ctrl.eventForm.$invalid">Cоздать</md-button>
+    </md-card-actions>
+    </form>
+  </md-content>
+</md-card>

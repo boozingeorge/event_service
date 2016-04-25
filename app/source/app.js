@@ -1,4 +1,4 @@
-var EventService = angular.module('EventService',['ngMaterial']);
+var EventService = angular.module('EventService',['ngMaterial', 'ngMessages']);
 
 EventService.constant('primaryColor', '#039BE5');
 EventService.constant('basicURL', 'http://52.193.244.203:8080');

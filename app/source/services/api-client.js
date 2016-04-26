@@ -147,17 +147,21 @@ function APIClientService($http, $q, basicURL) {
   APIClient.prototype.createEvent = function(event){
     var self = this;
     var deferred = $q.defer();
+    var data = 'begin_at=' + event.begin_at + '&end_at=' + event.end_at + '&title=' + event.title + '&description=' + event.description +
+      '&lat=' + event.location.lat + '&long=' + event.location.long + '&access_token=' + self._token.value;
+    if (event.picture) {
+      data += '&picture=' + event.picture;
+    }
     $http({
       method: 'POST',
       url: basicURL + '/api/event.create',
-      data: 'begin_at=' + event.begin_at + '&end_at=' + event.end_at + '&title=' + event.title + "&description="+ event.description +
-      "&lat=" + event.location.lat + "&long=" + event.location.long + "&picture=" + event.picture + '&access_token=' + self._token.value,
+      data: data,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     }).then(function(response){
       deferred.resolve(response);
-    }, function(){
+    }, function(response){
       deferred.reject(response);
     });
 

@@ -14,7 +14,7 @@ a {
 }
 .tools{
   width: 340px;
-  padding: 72px 8px 8px 8px;
+  padding: 72px 8px 8px 15px;
   display: none;
 }
 .tools md-card {
@@ -46,7 +46,7 @@ burger-menu md-fab-trigger button.md-button {
   margin: 8px;   
 } 
 burger-menu {
-  left: 8px;
+  left: 15px;
   top: 0;
   position: fixed;
   -webkit-backface-visibility: hidden;
@@ -75,4 +75,22 @@ search form {
   position: absolute;
   top: 15px;
   width: inherit;
+}
+#event-form .event-datetime {
+  margin: 0 14px 0 0;
+}
+#event-form .event-datetime .event-datetime-time-item  {
+  height: 33px;
+}
+#event-form .event-datetime .event-datetime-time-item .event-datetime-time_end-at {
+  margin: 0;
+}
+#event-form .event-datetime-error {
+  margin-top: 0;
+}
+#event-form .event-datetime-error input {
+  display: none;
+}
+#event-form .event-place md-input-container, .event-image md-input-container {
+  margin: 0;
 }

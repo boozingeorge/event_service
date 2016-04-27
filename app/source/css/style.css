@@ -82,7 +82,7 @@ search form {
 #event-form .event-datetime .event-datetime-time-item  {
   height: 33px;
 }
-#event-form .event-datetime .event-datetime-time-item .event-datetime-time_end-at {
+#event-form .event-datetime .event-datetime-time-item.event-datetime-time_end-at {
   margin: 0;
 }
 #event-form .event-datetime-error {
@@ -91,6 +91,12 @@ search form {
 #event-form .event-datetime-error input {
   display: none;
 }
+#event-form .event-datetime-error div[ng-message] {
+  margin-left: 36px;
+}
 #event-form .event-place md-input-container, .event-image md-input-container {
   margin: 0;
+}
+#event-form .event-description textarea {
+  height: 100%;
 }

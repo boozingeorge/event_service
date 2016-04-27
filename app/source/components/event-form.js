@@ -1,6 +1,12 @@
 function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, EventDatetime) {
   var ctrl = this;
-
+  
+  ctrl.event = {};
+  ctrl.event.location = {
+    lat: null,
+    long: null
+  };
+  
   initEventForm();
   
   ctrl.setLocation = function () {
@@ -38,15 +44,6 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
   };
   
   function initEventForm() {
-    ctrl.event = {
-      title: '',
-      description: '',
-      picture: '',
-      location: {
-        lat: null,
-        long: null
-      }
-    };
     var endDate = new Date();
     endDate.setDate(endDate.getDate() + 1);
     var maxDate = new Date();
@@ -55,16 +52,22 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
 
     ctrl.beginAt = new EventDatetime(new Date(), nowDate, maxDate);
     ctrl.endAt = new EventDatetime(endDate, nowDate, maxDate);
+    
     ctrl.viewLocation = '';
     ctrl.locationDisabled = false;
+    ctrl.event.title = '';
+    ctrl.event.description = '';
+    ctrl.event.picture = '';
     if (ctrl.eventForm) {
       ctrl.eventForm.$setPristine();
       ctrl.eventForm.$setUntouched();
       // Reset description input char counter to 0/<max_chars>
-      var descriptionCounterEl = angular.element(document.getElementsByClassName('md-char-counter'));
-      var counterVal = descriptionCounterEl.html().split('/');
-      counterVal[0] = '0';
-      descriptionCounterEl.html(counterVal.join('/'));
+      $timeout(function () {
+        var descriptionCounterEl = angular.element(document.getElementsByClassName('md-char-counter'));
+        var counterVal = descriptionCounterEl.html().split('/');
+        counterVal[0] = '0';
+        descriptionCounterEl.html(counterVal.join('/'));
+      });
     }
   }
 }

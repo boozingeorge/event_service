@@ -59,9 +59,6 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
 
 EventService.component('eventForm', {
   templateUrl: 'templates/event-form.html',
-  bindings: {
-    cards: '='
-  },
   controller: EventFormController
 });
 

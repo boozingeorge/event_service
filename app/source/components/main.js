@@ -21,28 +21,33 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
   };
   
   ctrl.events = [];
-  APIClient.getAllEvents().then(function (events) {
-    ctrl.events = events;
-    $timeout(function () {
-      Emitter.emit('eventsload');
+  
+  Emitter.listen('tokenload', function () {
+    APIClient.getAllEvents().then(function (events) {
+      ctrl.events = events;
+      $timeout(function () {
+        Emitter.emit('eventsload');
+      });
+    }).catch(function (err) {
+      PopUp.Error();
     });
-  }).catch(function (err) {
-    PopUp.Error();
+
+    ctrl.user = {};
+    APIClient.getProfile().then(function (response) {
+      ctrl.user = {
+        firstName: response.firstName,
+        lastName: response.lastName,
+        avatar: response.avatar,
+        events: response.events
+      };
+
+      $timeout(function () {
+        Emitter.emit('userload');
+      });
+    }).catch(function (err) {
+      PopUp.ConnectError();
+    });
   });
   
-  ctrl.user = {};
-  APIClient.getProfile().then(function (response) {
-    ctrl.user = {
-      firstName: response.firstName,
-      lastName: response.lastName,
-      avatar: response.avatar,
-      events: response.events
-    };
-
-    $timeout(function () {
-      Emitter.emit('userload');
-    });
-  }).catch(function (err) {
-    PopUp.ConnectError();
-  });
+  APIClient.getToken();
 };

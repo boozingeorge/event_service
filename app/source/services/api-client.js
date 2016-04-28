@@ -1,6 +1,6 @@
 EventService.factory('APIClient', APIClientService);
 
-function APIClientService($http, $q, basicURL) {
+function APIClientService($http, $q, basicURL, Emitter) {
 
   function APIClient() {
     var self = this;
@@ -23,6 +23,7 @@ function APIClientService($http, $q, basicURL) {
           expires_in: response.data.expires_in,
           timestamp: new Date().getTime()
         };
+        Emitter.emit('tokenload');
         deferred.resolve(response.data.token);
       }).catch(function (response) {
         deferred.reject(response);

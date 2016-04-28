@@ -19,8 +19,6 @@ function GoogleMapService(geoPoint, $compile, $rootScope) {
 
     self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    self.markers = [];
-
     self.infoWindow = new google.maps.InfoWindow();
 
     self.openInfoWindow = function(e, selectedMarker){
@@ -55,9 +53,12 @@ function GoogleMapService(geoPoint, $compile, $rootScope) {
       self.infoWindow.setContent(compiled[0]);
       self.infoWindow.open(self.map, marker);
     });
-    self.markers.push(marker);
   };
-
+  
+  GoogleMap.prototype.AddMarker = function(event) {
+    this.CreateMarker(event);
+  };
+  
   GoogleMap.prototype.CreateAllMarkers = function(events){
     var self = this;
 

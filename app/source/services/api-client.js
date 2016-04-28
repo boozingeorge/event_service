@@ -149,7 +149,7 @@ function APIClientService($http, $q, basicURL, Emitter) {
     var self = this;
     var deferred = $q.defer();
     var data = 'begin_at=' + event.begin_at + '&end_at=' + event.end_at + '&title=' + event.title + '&description=' + event.description +
-      '&lat=' + event.location.lat + '&long=' + event.location.long + '&access_token=' + self._token.value;
+      '&lat=' + event.lat + '&long=' + event.long + '&access_token=' + self._token.value;
     if (event.picture) {
       data += '&picture=' + event.picture;
     }

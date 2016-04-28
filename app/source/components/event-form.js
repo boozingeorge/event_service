@@ -1,4 +1,4 @@
-function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, EventDatetime) {
+function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, EventDatetime, Emitter) {
 
   var ctrl = this;
 
@@ -7,8 +7,8 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
   ctrl.setLocation = function () {
     var locationOnClick = google.maps.event.addListener(GoogleMap.map, 'click', function (event) {
       $timeout(function () {
-        ctrl.event.location.lat = event.latLng.lat();
-        ctrl.event.location.long = event.latLng.lng();
+        ctrl.event.lat = event.latLng.lat();
+        ctrl.event.long = event.latLng.lng();
         ctrl.viewLocation = event.latLng.lat().toFixed(4) + ', ' + event.latLng.lng().toFixed(4);
       });
       locationOnClick.remove();
@@ -25,10 +25,8 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
       if (response.data.error) {
         throw new Error(response.data.error.error_message);
       }
-      /**
-       * TODO: Display event on the map
-       * displayEvent();
-       */
+      ctrl.event.id = response.data.response.id;
+      Emitter.emit('eventadded', ctrl.event);
       initEventForm();
     }).catch(function (err) {
       PopUp.Error();
@@ -40,11 +38,9 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
       title: '',
       description: '',
       picture: '',
-      location: {
-        lat: null,
-        long: null
-      }
-    };
+      lat: null,
+      long: null
+    }
     var endDate = new Date();
     endDate.setDate(endDate.getDate() + 1);
     var maxDate = new Date();

@@ -5,22 +5,18 @@ function GoogleMapService(geoPoint, $compile, $rootScope) {
   function GoogleMap() {
 
     var self = this;
-
-    var mapOptions = {
+    
+    self.markers = [];
+    self.map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: new google.maps.LatLng(geoPoint.lat, geoPoint.long),
       mapTypeId: google.maps.MapTypeId.TERRAIN,
-      mapTypeControl:false,
+      mapTypeControl: false,
       streetViewControl: false,
       zoomControlOptions: {
-        style:google.maps.ZoomControlStyle.LARGE
+        style: google.maps.ZoomControlStyle.LARGE
       }
-    };
-
-    self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    self.markers = [];
-
+    });
     self.infoWindow = new google.maps.InfoWindow();
 
     self.openInfoWindow = function(e, selectedMarker){
@@ -28,21 +24,30 @@ function GoogleMapService(geoPoint, $compile, $rootScope) {
       google.maps.event.trigger(selectedMarker, 'click');
     };
   }
-
-  GoogleMap.prototype.CreateMarker = function(info){
+  
+  GoogleMap.prototype._displayMarker = function(event) {
     var self = this;
-    var marker = new google.maps.Marker({
+    
+    var marker = self.markers[event.id];
+    if (marker) {
+      if (!marker.getMap()) {
+        self.markers[event.id].setMap(self.map);
+      }
+      return;
+    } 
+    
+    marker = new google.maps.Marker({
       map: self.map,
-      position: new google.maps.LatLng(info.lat, info.long),
-      title: info.title
+      position: new google.maps.LatLng(event.lat, event.long),
+      title: event.title
     });
-
+    
     google.maps.event.addListener(marker, 'click', function(){
       var content = '<md-card style="box-shadow: 0px 0px 0px 0px">'+
         '<md-card-title>'+
         '<md-card-title-text>'+
-        '<span class="md-headline">'+ marker.title +'</span>'+
-        '<span class="md-subhead">'+ info.description +'</span>'+
+        '<span class="md-headline">'+ event.title +'</span>'+
+        '<span class="md-subhead">'+ event.description +'</span>'+
         '</md-card-title-text>'+
         '</md-card-title>'+
         '<md-card-actions layout="row" layout-align="end center">'+
@@ -55,16 +60,43 @@ function GoogleMapService(geoPoint, $compile, $rootScope) {
       self.infoWindow.setContent(compiled[0]);
       self.infoWindow.open(self.map, marker);
     });
-    self.markers.push(marker);
+    self.markers[event.id]= marker;
   };
-
-  GoogleMap.prototype.CreateAllMarkers = function(events){
+  
+  GoogleMap.prototype.addMarker = function(event) {
+    this._displayMarker(event);
+    this.map.setCenter({lat: event.lat, lng: event.long});
+  };
+  
+  GoogleMap.prototype.displayOneMarker = function(event) {
+    this.hideAll();
+    this._displayMarker(event);
+    this.map.setCenter({lat: event.lat, lng: event.long});
+  };
+  
+  GoogleMap.prototype.displayMarkers = function(events){
     var self = this;
 
     for (var i = 0; i < events.length; i++){
-      self.CreateMarker(events[i]);
+      self._displayMarker(events[i]);
+    }
+  };
+  
+  GoogleMap.prototype.displayAll = function(events){
+    var self = this;
+
+    for(var i in self.markers){
+      self.markers[i].setMap(self.map);
     }
   };
 
+  GoogleMap.prototype.hideAll = function(){
+    var self = this;
+
+    for(var i in self.markers){
+      self.markers[i].setMap(null);
+    }
+  };
+  
   return new GoogleMap();
 }

@@ -9,9 +9,9 @@ function PopUpService($mdDialog, $window) {
 
   PopUp.prototype.Error = function(content, title, areaLabel) {
     var self = this;
-    var content = content || 'Извините, произошла ошибка';
-    var title = title || 'Ошибка';
-    var areaLabel = areaLabel || 'Error';
+    content = content || 'Извините, произошла ошибка';
+    title = title || 'Ошибка';
+    areaLabel = areaLabel || 'Error';
     
     $mdDialog.show(
       $mdDialog.alert()

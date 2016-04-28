@@ -1,188 +1,137 @@
-function EventFormController(GoogleMap, $timeout, $scope, APIClient) {
-
+function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, EventDatetime, Emitter) {
   var ctrl = this;
-  ctrl.event = {
-    title:'',
-    description:'',
-    picture: '',
-    location: {
-      lat: null,
-      long: null
-    }
-  };
-  ctrl.viewLocation = '';
-
-  var nowDate = new Date();
-  ctrl.startDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours()));
-  ctrl.finishDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours() + 1));
-  ctrl.failDate = false;
-
-  ctrl.SetLocation = function () {
+  
+  ctrl.event = {};
+  
+  initEventForm();
+  
+  ctrl.setLocation = function () {
+    ctrl.locationDisabled = true;
     var locationOnClick = google.maps.event.addListener(GoogleMap.map, 'click', function (event) {
-      $timeout(function(){
-        ctrl.event.location.lat = event.latLng.lat();
-        ctrl.event.location.long = event.latLng.lng();
-        ctrl.viewLocation = event.latLng.lat().toFixed(3) + ', ' + event.latLng.lng().toFixed(3);
+      $timeout(function () {
+        ctrl.event.lat = event.latLng.lat();
+        ctrl.event.long = event.latLng.lng();
+        ctrl.viewLocation = event.latLng.lat().toFixed(4) + ', ' + event.latLng.lng().toFixed(4);
+        ctrl.locationDisabled = false;
       });
-      console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
       locationOnClick.remove();
     });
   };
-  ctrl.createEvent = function(){
-    ctrl.event.begin_at = ctrl.startDate.date;
-    ctrl.event.end_at = ctrl.finishDate.date;
-    console.log(ctrl.event);
-    APIClient.createEvent(ctrl.event).then(function(response){
-      console.log("------suc------");
-      console.log(response);
-      console.log("------suc------");
-      clearEventForm();
-    }, function(response){
-      console.log("------fail------");
-      console.log(response);
-      console.log("------fail------");
-      clearEventForm();
+
+  ctrl.createEvent = function () {
+    ctrl.event.beginAt = ctrl.beginAt.getDatetime();
+    ctrl.event.endAt = ctrl.endAt.getDatetime();
+    if (!ctrl.event.picture) {
+      delete ctrl.event['picture'];
+    }
+    
+    APIClient.createEvent(ctrl.event).then(function (response) {
+      if (response.data.error) {
+        throw new Error(response.data.error.error_message);
+      }
+      Emitter.emit('eventAdded', {
+        id: response.data.response.id,
+        beginAt: ctrl.event.beginAt,
+        endAt: ctrl.event.endAt,
+        title: ctrl.event.title,
+        description: ctrl.event.description,
+        picture: ctrl.event.picture,
+        lat: ctrl.event.lat,
+        long: ctrl.event.long,
+        membersAmount: 0
+      });
+      ctrl.events.push({
+        id: response.data.response.id,
+        beginAt: ctrl.event.beginAt,
+        endAt: ctrl.event.endAt,
+        title: ctrl.event.title,
+        description: ctrl.event.description,
+        picture: ctrl.event.picture,
+        lat: ctrl.event.lat,
+        long: ctrl.event.long,
+        membersAmount: 0
+      });
+      initEventForm();
+    }).catch(function (err) {
+      PopUp.Error();
     });
   };
-  function DateEvent(date){
-    var self = this;
-    self.minute = date.getMinutes();
-    self.date = date;
-    self.minDate =date;
-    self.maxDate =  new Date(
-      date.getFullYear(),
-      date.getMonth() + 2,
-      date.getDate()
-    );
-    self.hour = function(value){
-      return arguments.length ? (this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), value)) : self.date.getHours();
-    };
-    /*Object.defineProperty(this, "hour", {
-      get: function() {
-        return this.date.getHours();
-      },
-      set: function(value){
-        console.log(value);
-        this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), value);
-      }
-    });*/
-  }
+  
+  function initEventForm() {
+    var endDate = new Date();
+    endDate.setDate(endDate.getDate() + 1);
+    var maxDate = new Date();
+    maxDate.setDate(endDate.getDate() + 365);
+    var nowDate = new Date();
 
-  function clearEventForm(){
-    ctrl.event = {
-      title:'',
-      description:'',
-      picture: '',
-      location: {
-        lat: null,
-        long: null
-      }
-    };
+    ctrl.beginAt = new EventDatetime(new Date(), nowDate, maxDate);
+    ctrl.endAt = new EventDatetime(endDate, nowDate, maxDate);
+    
     ctrl.viewLocation = '';
-    ctrl.startDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours()));
-    ctrl.finishDate = new DateEvent(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours() + 1));
+    ctrl.locationDisabled = false;
+    ctrl.event.title = '';
+    ctrl.event.description = '';
+    ctrl.event.picture = '';
+    if (ctrl.eventForm) {
+      ctrl.eventForm.$setPristine();
+      ctrl.eventForm.$setUntouched();
+      // Reset description input char counter to 0/<max_chars>
+      $timeout(function () {
+        var descriptionCounterEl = angular.element(document.getElementsByClassName('md-char-counter'));
+        var counterVal = descriptionCounterEl.html().split('/');
+        counterVal[0] = '0';
+        descriptionCounterEl.html(counterVal.join('/'));
+      });
+    }
   }
 }
 
 EventService.component('eventForm', {
   templateUrl: 'templates/event-form.html',
-  bindings: {
-    cards: '='
+  bindings:{
+    events: '='
   },
   controller: EventFormController
 });
-EventService.directive("validStartHour", ['Emitter', function(Emitter) {
+
+EventService.directive("validDatetime", function () {
   return {
     restrict: "A",
-
-    require: "ngModel",
-    scope:{
-      startDate: '<',
-      finishDate:'<'
+    scope: {
+      changeDatetimeHandler: '=',
+      form: '=',
+      beginAt: '=',
+      endAt: '='
     },
-
-    link: function(scope, element, attributes, ngModel) {
-      var self = this;
-      ngModel.$parsers.unshift(validate);
-      Emitter.listen('finishdate', function () {
-        if(typeof ngModel.$viewValue == 'undefined' || isNaN(ngModel.$viewValue)){
-          return onChangeFinishHour(scope.finishDate.hour());
-        }else{
-          return onChangeFinishHour(ngModel.$viewValue);
-        }
-      });
-      function validate(viewValue){
-        scope.startDate.hour(viewValue);
-        if(scope.startDate.date >= scope.finishDate.date){
-          ngModel.$setValidity('startHour', false);
-          Emitter.emit('startdate');
-          return viewValue;
-        }else{
-          ngModel.$setValidity('startHour', true);
-          Emitter.emit('startdate');
-          return viewValue;
-        }
-      }
-      function onChangeFinishHour(value){
-        scope.startDate.hour(value);
-        if(scope.startDate.date >= scope.finishDate.date){
-          ngModel.$setValidity('startHour', false);
-          Emitter.emit('startdate');
-          return value;
-        }else{
-          ngModel.$setValidity('startHour', true);
-          Emitter.emit('startdate');
-          return value;
+    link: function ($scope, element, attributes) {
+      $scope.changeDatetimeHandler = function () {
+        if ($scope.beginAt.getDatetime() >= $scope.endAt.getDatetime()) {
+          $scope.form.datetime.$setTouched();
+          $scope.form.datetime.$setValidity('datetime', false);
+        } else {
+          $scope.form.datetime.$setValidity('datetime', true);
         }
       }
     }
   };
-}]);
+});
 
-EventService.directive("validFinishHour", ['Emitter', function(Emitter) {
+EventService.directive("validPictureUpload", function () {
   return {
     restrict: "A",
-
-    require: "ngModel",
-    scope:{
-      startDate: '<',
-      finishDate:'<'
+    scope: {
+      changeUrlHandler: '=',
+      form: '=',
+      picture: '='
     },
-
-    link: function(scope, element, attributes, ngModel) {
-      var self = this;
-      ngModel.$parsers.unshift(validate);
-
-      Emitter.listen('startdate', function () {
-        if(typeof ngModel.$viewValue == 'undefined' || isNaN(ngModel.$viewValue)){
-          return onChangeStartHour(scope.finishDate.hour());
-        }else{
-          return onChangeStartHour(ngModel.$viewValue);
+    link: function ($scope, element, attributes) {
+      $scope.changeUrlHandler = function (e) {
+        if ($scope.picture && !$scope.picture.match(/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/ig)) {
+          $scope.form.picture.$setValidity('url', false);
+        } else {
+          $scope.form.picture.$setValidity('url', true);
         }
-      });
-      function validate(viewValue){
-        scope.finishDate.hour(viewValue);
-        if(scope.startDate.date >= scope.finishDate.date){
-          ngModel.$setValidity('finishHour', false);
-          Emitter.emit('finishdate');
-          return viewValue;
-        }else{
-          ngModel.$setValidity('finishHour', true);
-          Emitter.emit('finishdate');
-          return viewValue;
-        }
-      }
-      function onChangeStartHour(value){
-        scope.finishDate.hour(value);
-        if(scope.startDate.date >= scope.finishDate.date){
-          ngModel.$setValidity('finishHour', false);
-          return value;
-        }else{
-          ngModel.$setValidity('finishHour', true);
-          return value;
-        }
-      }
+      };
     }
   };
-}]);
-
+});

@@ -2,10 +2,6 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
   var ctrl = this;
   
   ctrl.event = {};
-  ctrl.event.location = {
-    lat: null,
-    long: null
-  };
   
   initEventForm();
   
@@ -23,8 +19,8 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
   };
 
   ctrl.createEvent = function () {
-    ctrl.event.begin_at = ctrl.beginAt.getDatetime();
-    ctrl.event.end_at = ctrl.endAt.getDatetime();
+    ctrl.event.beginAt = ctrl.beginAt.getDatetime();
+    ctrl.event.endAt = ctrl.endAt.getDatetime();
     if (!ctrl.event.picture) {
       delete ctrl.event['picture'];
     }
@@ -33,8 +29,28 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
       if (response.data.error) {
         throw new Error(response.data.error.error_message);
       }
-      ctrl.event.id = response.data.response.id;
-      Emitter.emit('eventadded', ctrl.event);
+      Emitter.emit('eventAdded', {
+        id: response.data.response.id,
+        beginAt: ctrl.event.beginAt,
+        endAt: ctrl.event.endAt,
+        title: ctrl.event.title,
+        description: ctrl.event.description,
+        picture: ctrl.event.picture,
+        lat: ctrl.event.lat,
+        long: ctrl.event.long,
+        membersAmount: 0
+      });
+      ctrl.events.push({
+        id: response.data.response.id,
+        beginAt: ctrl.event.beginAt,
+        endAt: ctrl.event.endAt,
+        title: ctrl.event.title,
+        description: ctrl.event.description,
+        picture: ctrl.event.picture,
+        lat: ctrl.event.lat,
+        long: ctrl.event.long,
+        membersAmount: 0
+      });
       initEventForm();
     }).catch(function (err) {
       PopUp.Error();
@@ -72,6 +88,9 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
 
 EventService.component('eventForm', {
   templateUrl: 'templates/event-form.html',
+  bindings:{
+    events: '='
+  },
   controller: EventFormController
 });
 

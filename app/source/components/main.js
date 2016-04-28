@@ -22,11 +22,11 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
   
   ctrl.events = [];
   
-  Emitter.listen('tokenload', function () {
+  Emitter.listen('tokenLoaded', function () {
     APIClient.getAllEvents().then(function (events) {
       ctrl.events = events;
       $timeout(function () {
-        Emitter.emit('eventsload');
+        Emitter.emit('eventsLoaded');
       });
     }).catch(function (err) {
       PopUp.Error();
@@ -40,10 +40,6 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
         avatar: response.avatar,
         events: response.events
       };
-
-      $timeout(function () {
-        Emitter.emit('userload');
-      });
     }).catch(function (err) {
       PopUp.ConnectError();
     });

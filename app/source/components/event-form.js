@@ -1,4 +1,4 @@
-function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, EventDatetime) {
+function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, EventDatetime, Emitter) {
   var ctrl = this;
   
   ctrl.event = {};
@@ -13,8 +13,8 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
     ctrl.locationDisabled = true;
     var locationOnClick = google.maps.event.addListener(GoogleMap.map, 'click', function (event) {
       $timeout(function () {
-        ctrl.event.location.lat = event.latLng.lat();
-        ctrl.event.location.long = event.latLng.lng();
+        ctrl.event.lat = event.latLng.lat();
+        ctrl.event.long = event.latLng.lng();
         ctrl.viewLocation = event.latLng.lat().toFixed(4) + ', ' + event.latLng.lng().toFixed(4);
         ctrl.locationDisabled = false;
       });
@@ -33,10 +33,8 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
       if (response.data.error) {
         throw new Error(response.data.error.error_message);
       }
-      /**
-       * TODO: Display event on the map
-       * displayEvent();
-       */
+      ctrl.event.id = response.data.response.id;
+      Emitter.emit('eventadded', ctrl.event);
       initEventForm();
     }).catch(function (err) {
       PopUp.Error();
@@ -74,9 +72,6 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
 
 EventService.component('eventForm', {
   templateUrl: 'templates/event-form.html',
-  bindings: {
-    cards: '='
-  },
   controller: EventFormController
 });
 

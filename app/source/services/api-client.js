@@ -1,6 +1,6 @@
 EventService.factory('APIClient', APIClientService);
 
-function APIClientService($http, $q, basicURL) {
+function APIClientService($http, $q, basicURL, Emitter) {
 
   function APIClient() {
     var self = this;
@@ -23,6 +23,7 @@ function APIClientService($http, $q, basicURL) {
           expires_in: response.data.expires_in,
           timestamp: new Date().getTime()
         };
+        Emitter.emit('tokenload');
         deferred.resolve(response.data.token);
       }).catch(function (response) {
         deferred.reject(response);
@@ -148,7 +149,7 @@ function APIClientService($http, $q, basicURL) {
     var self = this;
     var deferred = $q.defer();
     var data = 'begin_at=' + event.begin_at + '&end_at=' + event.end_at + '&title=' + event.title + '&description=' + event.description +
-      '&lat=' + event.location.lat + '&long=' + event.location.long + '&access_token=' + self._token.value;
+      '&lat=' + event.lat + '&long=' + event.long + '&access_token=' + self._token.value;
     if (event.picture) {
       data += '&picture=' + event.picture;
     }

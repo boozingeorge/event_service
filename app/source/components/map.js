@@ -4,6 +4,10 @@ function MapController(Emitter, GoogleMap){
   Emitter.listen('eventsload', function () {
     GoogleMap.CreateAllMarkers(ctrl.events);
   });
+  
+  Emitter.listen('eventadded', function (event) {
+    GoogleMap.AddMarker(event);
+  });
 }
 EventService.component('map', {
   templateUrl: 'templates/map.html',

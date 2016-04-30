@@ -1,6 +1,4 @@
-EventService.factory('GoogleMap', GoogleMapService);
-
-function GoogleMapService(geoPoint, $compile, $rootScope) {
+function GoogleMapService($compile, $rootScope, Config) {
 
   function GoogleMap() {
 
@@ -9,7 +7,7 @@ function GoogleMapService(geoPoint, $compile, $rootScope) {
     self.markers = [];
     self.map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
-      center: new google.maps.LatLng(geoPoint.lat, geoPoint.long),
+      center: new google.maps.LatLng(Config.location.lat, Config.location.long),
       mapTypeId: google.maps.MapTypeId.TERRAIN,
       mapTypeControl: false,
       streetViewControl: false,
@@ -100,3 +98,5 @@ function GoogleMapService(geoPoint, $compile, $rootScope) {
   
   return new GoogleMap();
 }
+
+EventService.factory('GoogleMap', GoogleMapService);

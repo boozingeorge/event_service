@@ -1,9 +1,3 @@
-EventService.component('main', {
-  templateUrl: 'templates/main.html',
-  transclude: false,
-  controller: MainController
-});
-
 function MainController ($timeout, APIClient, PopUp, Emitter) {
   var ctrl = this;
   
@@ -26,7 +20,7 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
     APIClient.getAllEvents().then(function (events) {
       ctrl.events = events;
       $timeout(function () {
-        Emitter.emit('eventsLoaded');
+        Emitter.emit('eventsLoaded', events);
       });
     }).catch(function (err) {
       PopUp.Error();
@@ -47,3 +41,8 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
   
   APIClient.getToken();
 };
+
+EventService.component('main', {
+  templateUrl: 'templates/main.html',
+  controller: MainController
+});

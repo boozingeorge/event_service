@@ -1,8 +1,6 @@
 function MapController(Emitter, GoogleMap){
-  var ctrl = this;
-  
-  Emitter.listen('eventsLoaded', function () {
-    GoogleMap.displayMarkers(ctrl.events);
+  Emitter.listen('eventsLoaded', function (events) {
+    GoogleMap.displayMarkers(events);
   });
   
   Emitter.listen('eventAdded', function (event) {
@@ -13,14 +11,12 @@ function MapController(Emitter, GoogleMap){
     GoogleMap.displayOneMarker(event);
   });
   
-  Emitter.listen('eventUnselected', function (event) {
+  Emitter.listen('eventUnselected', function () {
     GoogleMap.displayAll();
   });
 }
+
 EventService.component('map', {
   templateUrl: 'templates/map.html',
-  bindings:{
-    events:'<'
-  },
   controller:MapController
 });

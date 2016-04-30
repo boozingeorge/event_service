@@ -1,25 +1,25 @@
 <md-fab-toolbar id="burger-toolbar" md-open="$ctrl.demo.isOpen" count="$ctrl.demo.count" md-direction="right">
-  <md-fab-trigger class="align-with-text">
-    <md-button aria-label="menu" class="md-fab md-primary">
-      <md-icon md-svg-src="svg/ic_menu_24px.svg"></md-icon>
-    </md-button>
-  </md-fab-trigger>
-  <md-toolbar>
-    <md-fab-actions class="md-toolbar-tools">
-      <md-button ng-click="$ctrl.clickShowTopEvents()" aria-label="label" class="md-icon-button">
-        <md-icon md-svg-src="svg/ic_whatshot_48px.svg"></md-icon>
-      </md-button>
-      <md-button ng-click="$ctrl.clickShowEventForm()" aria-label="label" class="md-icon-button">
-        <md-icon md-svg-src="svg/ic_add_location_48px.svg"></md-icon>
-      </md-button>
-      <md-button ng-click="$ctrl.clickShowProfile()"  aria-label="comment" class="md-icon-button">
-        <md-icon md-svg-src="svg/ic_account_circle_48px.svg"></md-icon>
-      </md-button>
-      <a href="/logout">
-        <md-button aria-label="photo" class="md-icon-button">
-          <md-icon md-svg-src="svg/ic_exit_to_app_48px.svg"></md-icon>
+    <md-fab-trigger class="align-with-text">
+        <md-button aria-label="Menu" class="md-fab md-primary">
+            <md-icon md-svg-src="svg/ic_menu_24px.svg"></md-icon>
         </md-button>
-      </a>
-    </md-fab-actions>
-  </md-toolbar>
+    </md-fab-trigger>
+    <md-toolbar>
+        <md-fab-actions class="md-toolbar-tools">
+            <md-button ng-click="$ctrl.clickShowTopEvents()" aria-label="Top events" class="md-icon-button">
+                <md-icon md-svg-src="svg/ic_whatshot_48px.svg"></md-icon>
+            </md-button>
+            <md-button ng-click="$ctrl.clickShowEventForm()" aria-label="Event form" class="md-icon-button">
+                <md-icon md-svg-src="svg/ic_add_location_48px.svg"></md-icon>
+            </md-button>
+            <md-button ng-click="$ctrl.clickShowProfile()" aria-label="User Profile" class="md-icon-button">
+                <md-icon md-svg-src="svg/ic_account_circle_48px.svg"></md-icon>
+            </md-button>
+            <a href="/logout">
+                <md-button aria-label="photo" class="md-icon-button">
+                    <md-icon md-svg-src="svg/ic_exit_to_app_48px.svg"></md-icon>
+                </md-button>
+            </a>
+        </md-fab-actions>
+    </md-toolbar>
 </md-fab-toolbar>

@@ -1,10 +1,9 @@
-function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, EventDatetime, Emitter) {
+function EventFormController(GoogleMap, $timeout, $scope, Config, PopUp, APIClient, EventDatetime, Emitter) {
   var ctrl = this;
-  
+
   ctrl.event = {};
-  
   initEventForm();
-  
+
   ctrl.setLocation = function () {
     ctrl.locationDisabled = true;
     var locationOnClick = google.maps.event.addListener(GoogleMap.map, 'click', function (event) {
@@ -24,12 +23,12 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
     if (!ctrl.event.picture) {
       delete ctrl.event['picture'];
     }
-    
+
     APIClient.createEvent(ctrl.event).then(function (response) {
       if (response.data.error) {
         throw new Error(response.data.error.error_message);
       }
-      Emitter.emit('eventAdded', {
+      var event = {
         id: response.data.response.id,
         beginAt: ctrl.event.beginAt,
         endAt: ctrl.event.endAt,
@@ -39,39 +38,27 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
         lat: ctrl.event.lat,
         long: ctrl.event.long,
         membersAmount: 0
-      });
-      ctrl.events.push({
-        id: response.data.response.id,
-        beginAt: ctrl.event.beginAt,
-        endAt: ctrl.event.endAt,
-        title: ctrl.event.title,
-        description: ctrl.event.description,
-        picture: ctrl.event.picture,
-        lat: ctrl.event.lat,
-        long: ctrl.event.long,
-        membersAmount: 0
-      });
+      };
+      Emitter.emit('eventAdded', event);
+      ctrl.events.push(event);
       initEventForm();
     }).catch(function (err) {
       PopUp.Error();
     });
   };
-  
+
   function initEventForm() {
     var endDate = new Date();
-    endDate.setDate(endDate.getDate() + 1);
+    endDate.setDate(endDate.getDate() + Config.endDateInterval);
     var maxDate = new Date();
-    maxDate.setDate(endDate.getDate() + 365);
+    maxDate.setDate(endDate.getDate() + Config.maxDateInterval);
     var nowDate = new Date();
 
     ctrl.beginAt = new EventDatetime(new Date(), nowDate, maxDate);
     ctrl.endAt = new EventDatetime(endDate, nowDate, maxDate);
-    
-    ctrl.viewLocation = '';
+
     ctrl.locationDisabled = false;
-    ctrl.event.title = '';
-    ctrl.event.description = '';
-    ctrl.event.picture = '';
+    ctrl.event.title = ctrl.event.description = ctrl.event.picture = ctrl.viewLocation = '';
     if (ctrl.eventForm) {
       ctrl.eventForm.$setPristine();
       ctrl.eventForm.$setUntouched();
@@ -88,7 +75,7 @@ function EventFormController(GoogleMap, $timeout, $scope, PopUp, APIClient, Even
 
 EventService.component('eventForm', {
   templateUrl: 'templates/event-form.html',
-  bindings:{
+  bindings: {
     events: '='
   },
   controller: EventFormController
@@ -98,13 +85,13 @@ EventService.directive("validDatetime", function () {
   return {
     restrict: "A",
     scope: {
-      changeDatetimeHandler: '=',
+      onDatetimeChange: '=',
       form: '=',
       beginAt: '=',
       endAt: '='
     },
     link: function ($scope, element, attributes) {
-      $scope.changeDatetimeHandler = function () {
+      $scope.onDatetimeChange = function () {
         if ($scope.beginAt.getDatetime() >= $scope.endAt.getDatetime()) {
           $scope.form.datetime.$setTouched();
           $scope.form.datetime.$setValidity('datetime', false);
@@ -120,12 +107,12 @@ EventService.directive("validPictureUpload", function () {
   return {
     restrict: "A",
     scope: {
-      changeUrlHandler: '=',
+      onUrlChange: '=',
       form: '=',
       picture: '='
     },
     link: function ($scope, element, attributes) {
-      $scope.changeUrlHandler = function (e) {
+      $scope.onUrlChange = function (e) {
         if ($scope.picture && !$scope.picture.match(/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/ig)) {
           $scope.form.picture.$setValidity('url', false);
         } else {

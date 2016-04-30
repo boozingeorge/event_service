@@ -1,5 +1,4 @@
 function SearchController(Emitter) {
-
   var ctrl = this;
   
   ctrl.selectedItemChange = function (event) {
@@ -8,15 +7,14 @@ function SearchController(Emitter) {
     }
   };
   
-  ctrl.querySearch = function (query) {
-    var results = query ? ctrl.events.filter(createFilterFor(query)) : ctrl.events;
-    return results;
-  };
-  
   ctrl.searchTextChange = function (searchText) {
     if (ctrl.selectedItem && ctrl.selectedItem.title !== searchText) {
       Emitter.emit('eventUnselected');
     }
+  };
+  
+  ctrl.querySearch = function (query) {
+    return query ? ctrl.events.filter(createFilterFor(query)) : ctrl.events;
   };
   
   function createFilterFor(query) {

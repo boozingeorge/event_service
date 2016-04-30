@@ -2,31 +2,31 @@
     <md-content class="autoScroll">
         <form name="$ctrl.eventForm" ng-submit="$ctrl.createEvent()" novalidate>
             <md-input-container md-no-float class="md-block content-in-card">
-              <label>Название</label>
-              <md-icon md-svg-src="svg/ic_text_format_48px.svg"></md-icon>
-              <input name="title" ng-model="$ctrl.event.title" type="text" ng-required="true">
-              <div ng-messages="$ctrl.eventForm.title.$error">
-                <div ng-message="required">Это поле обязательно</div>
-              </div>
+                <label>Название</label>
+                <md-icon md-svg-src="svg/ic_text_format_48px.svg"></md-icon>
+                <input name="title" ng-model="$ctrl.event.title" type="text" ng-required="true" aria-label="Title">
+                <div ng-messages="$ctrl.eventForm.title.$error">
+                    <div ng-message="required">Это поле обязательно</div>
+                </div>
             </md-input-container>
             <md-input-container class="md-block content-in-card event-description">
-              <md-icon md-svg-src="svg/ic_border_color_48px.svg" ></md-icon>
-              <textarea name="description" ng-model="$ctrl.event.description" ng-required="true" md-maxlength="300" rows="5" placeholder="Описание" md-no-autogrow md-select-on-focus></textarea>
-              <div ng-messages="$ctrl.eventForm.description.$error">
-                <div ng-message="required">Это поле обязательно</div>
-              </div>
+                <md-icon md-svg-src="svg/ic_border_color_48px.svg" ></md-icon>
+                <textarea name="description" ng-model="$ctrl.event.description" ng-required="true" md-maxlength="300" rows="5" placeholder="Описание" md-no-autogrow md-select-on-focus></textarea>
+                <div ng-messages="$ctrl.eventForm.description.$error">
+                    <div ng-message="required">Это поле обязательно</div>
+                </div>
             </md-input-container>
             <div
                 valid-datetime
                 begin-at="$ctrl.beginAt"
                 end-at="$ctrl.endAt"
-                change-datetime-handler="changeDatetimeHandler"
+                on-datetime-change="onDatetimeChange"
                 form="$ctrl.eventForm"
                 class="event-datetime">
                 <div layout="row" layout-align="space-between center">
                     <md-datepicker
                         ng-model="$ctrl.beginAt.date"
-                        ng-change="changeDatetimeHandler()"
+                        ng-change="onDatetimeChange()"
                         md-placeholder="Enter date"
                         md-min-date="$ctrl.beginAt.minDate"
                         md-max-date="$ctrl.beginAt.maxDate">
@@ -35,27 +35,29 @@
                         <md-input-container class="event-datetime-time-item ">
                             <input
                                 ng-model="$ctrl.beginAt.hours"
-                                ng-change="changeDatetimeHandler()"
+                                ng-change="onDatetimeChange()"
                                 type="number"
                                 min= "0"
                                 max="23"
-                                step="1">
+                                step="1"
+                                aria-label="Begin at hours">
                         </md-input-container>
                         <md-input-container class="event-datetime-time-item">
                             <input
                                 ng-model="$ctrl.beginAt.minutes"
-                                ng-change="changeDatetimeHandler()"
+                                ng-change="onDatetimeChange()"
                                 type="number"
                                 min= "0"
                                 max="59"
-                                step="5">
+                                step="5"
+                                aria-label="Begin at minutes">
                         </md-input-container>
                     </div>
                 </div>
                 <div layout="row" layout-align="space-between center">
                     <md-datepicker
                         ng-model="$ctrl.endAt.date"
-                        ng-change="changeDatetimeHandler()"
+                        ng-change="onDatetimeChange()"
                         md-placeholder="Enter date"
                         md-min-date="$ctrl.endAt.minDate"
                         md-max-date="$ctrl.endAt.maxDate">
@@ -64,25 +66,27 @@
                         <md-input-container class="event-datetime-time-item event-datetime-time_end-at">
                             <input
                                 ng-model="$ctrl.endAt.hours"
-                                ng-change="changeDatetimeHandler()"
+                                ng-change="onDatetimeChange()"
                                 type="number"
                                 min= "0"
                                 max="23"
-                                step="1">
+                                step="1"
+                                aria-label="End at hours">
                         </md-input-container>
                         <md-input-container class="event-datetime-time-item  event-datetime-time_end-at">
                             <input
                                 ng-model="$ctrl.endAt.minutes"
-                                ng-change="changeDatetimeHandler()"
+                                ng-change="onDatetimeChange()"
                                 type="number"
                                 min="0"
                                 max="59"
-                                step="5">
+                                step="5"
+                                aria-label="End at minutes">
                         </md-input-container>
                     </div>
                 </div>
                 <md-input-container md-no-float class="md-block content-in-card event-datetime-error" md-show-errors="false">
-                    <input name="datetime" type="text" ng-model="$ctrl.event">
+                    <input name="datetime" type="text" ng-model="$ctrl.event" aria-label="Datetime error">
                     <div ng-messages="$ctrl.eventForm.datetime.$error">
                         <div ng-message="datetime">Проверьте дату окончания события</div>
                     </div>
@@ -92,7 +96,7 @@
                 valid-picture-upload layout="row"
                 picture="$ctrl.event.picture"
                 form="$ctrl.eventForm"
-                change-url-handler="changeUrlHandler"
+                on-url-change="onUrlChange"
                 layout-align="space-between center"
                 class="content-in-card event-image">
                 <md-input-container class="md-icon-float md-block">
@@ -100,14 +104,15 @@
                     <md-icon md-svg-src="svg/ic_insert_photo_48px.svg"></md-icon>
                     <input
                         name="picture"
-                        ng-keyup="changeUrlHandler()"
+                        ng-keyup="onUrlChange()"
                         ng-model="$ctrl.event.picture"
-                        type="text">
+                        type="text"
+                        aria-label="Picture">
                     <div ng-messages="$ctrl.eventForm.picture.$error">
                         <div ng-message="url">Введите корректную ссылку</div>
                     </div>
                 </md-input-container>
-                <md-button class="md-fab md-mini md-primary" disabled="disabled">
+                <md-button class="md-fab md-mini md-primary" disabled="disabled" aria-label="Upload picture">
                     <md-icon md-svg-src="svg/ic_file_upload_48px.svg"></md-icon>
                 </md-button>
             </div>
@@ -115,12 +120,12 @@
                 <md-input-container class="">
                     <label>Место</label>
                     <md-icon md-svg-src="svg/ic_explore_48px.svg"></md-icon>
-                    <input ng-model="$ctrl.viewLocation" type="text" name="location" readonly ng-required="true">
+                    <input ng-model="$ctrl.viewLocation" type="text" name="location" readonly ng-required="true" aria-label="Location">
                     <div ng-messages="$ctrl.eventForm.location.$error">
                         <div ng-message="required">Это поле обязательно</div>
                     </div>
                 </md-input-container>
-                <md-button ng-click="$ctrl.setLocation()" class="md-fab md-mini md-primary"  ng-disabled="$ctrl.locationDisabled">
+                <md-button ng-click="$ctrl.setLocation()" class="md-fab md-mini md-primary"  ng-disabled="$ctrl.locationDisabled" aria-label="Set location">
                     <md-tooltip md-direction="right">
                         Нажмите на кнопку, затем выберите место на карте
                     </md-tooltip>  
@@ -128,7 +133,7 @@
                 </md-button>
             </div>
             <md-card-actions layout="row" layout-align="start center">
-                <md-button type="submit" class="md-primary" ng-disabled="$ctrl.eventForm.$invalid">Cоздать</md-button>
+                <md-button type="submit" class="md-primary" ng-disabled="$ctrl.eventForm.$invalid" aria-label="Create">Cоздать</md-button>
             </md-card-actions>
         </form>
     </md-content>

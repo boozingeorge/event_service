@@ -1,12 +1,5 @@
 function BurgerController() {
-
   var ctrl = this;
-  ctrl.isOpen = false;
-  ctrl.demo = {
-    isOpen: false,
-    count: 1,
-    direction: 'right'
-  };
  
   ctrl.clickShowEventForm = function () {
     ctrl.cards.eventForm = true;

@@ -76,6 +76,9 @@ search form {
   top: 15px;
   width: inherit;
 }
+#event-form md-content {
+  margin-top: 14px;
+}
 #event-form .event-datetime {
   margin: 0 14px 0 0;
 }

@@ -1,10 +1,10 @@
 EventService.factory('APIClient', APIClientService);
 
-function APIClientService($http, $q, basicURL, Emitter) {
+function APIClientService($http, $q, Config, Emitter) {
 
   function APIClient() {
     var self = this;
-    self._basicURL = basicURL;
+    self._basicURL = Config.basicURL;
     self._token = null;
   }
 
@@ -52,7 +52,7 @@ function APIClientService($http, $q, basicURL, Emitter) {
     self.getToken().then(function (response) {
       return $http({
         method: 'GET',
-        url: basicURL + '/api/event.get?access_token=' + self._token.value
+        url: self._basicURL + '/api/event.get?access_token=' + self._token.value
       });
     }, function (response) {
       deferred.reject(response);
@@ -83,7 +83,7 @@ function APIClientService($http, $q, basicURL, Emitter) {
     self.getToken().then(function (response) {
       return $http({
         method: 'GET',
-        url: basicURL + '/api/user.getById?access_token=' + self._token.value
+        url: self._basicURL + '/api/user.getById?access_token=' + self._token.value
       });
     }, function (response) {
       deferred.reject(response);
@@ -107,7 +107,7 @@ function APIClientService($http, $q, basicURL, Emitter) {
     self.getToken().then(function (response) {
       return $http({
         method: 'POST',
-        url: basicURL + '/api/event.join',
+        url: self._basicURL + '/api/event.join',
         data: 'id=' + id + '&access_token=' + self._token.value,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -129,7 +129,7 @@ function APIClientService($http, $q, basicURL, Emitter) {
     self.getToken().then(function (response) {
       return $http({
         method: 'POST',
-        url: basicURL + '/api/event.leave',
+        url: self._basicURL + '/api/event.leave',
         data: 'id=' + id + '&access_token=' + self._token.value,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -155,7 +155,7 @@ function APIClientService($http, $q, basicURL, Emitter) {
     }
     $http({
       method: 'POST',
-      url: basicURL + '/api/event.create',
+      url: self._basicURL + '/api/event.create',
       data: data,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

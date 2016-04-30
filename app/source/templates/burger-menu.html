@@ -7,16 +7,28 @@
     <md-toolbar>
         <md-fab-actions class="md-toolbar-tools">
             <md-button ng-click="$ctrl.clickShowTopEvents()" aria-label="Top events" class="md-icon-button">
+                <md-tooltip md-direction="right">
+                    Горячие события(в разработке)
+                </md-tooltip>  
                 <md-icon md-svg-src="svg/ic_whatshot_48px.svg"></md-icon>
             </md-button>
             <md-button ng-click="$ctrl.clickShowEventForm()" aria-label="Event form" class="md-icon-button">
+                <md-tooltip md-direction="right">
+                    Добавить событие
+                </md-tooltip>  
                 <md-icon md-svg-src="svg/ic_add_location_48px.svg"></md-icon>
             </md-button>
             <md-button ng-click="$ctrl.clickShowProfile()" aria-label="User Profile" class="md-icon-button">
+                <md-tooltip md-direction="right">
+                    Ваш профиль
+                </md-tooltip>  
                 <md-icon md-svg-src="svg/ic_account_circle_48px.svg"></md-icon>
             </md-button>
             <a href="/logout">
                 <md-button aria-label="photo" class="md-icon-button">
+                    <md-tooltip md-direction="right">
+                        Выход
+                    </md-tooltip>  
                     <md-icon md-svg-src="svg/ic_exit_to_app_48px.svg"></md-icon>
                 </md-button>
             </a>

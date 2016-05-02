@@ -103,3 +103,49 @@ search form {
 #event-form .event-description textarea {
   height: 100%;
 }
+.map-card {
+  width: 256px;
+}
+.map-card md-card {
+  box-shadow: 0px 0px 0px 0px;
+}
+.map-card .card-media {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 87px;
+  width:87px;
+}
+.map-card md-card-title {
+  padding-right: 0;
+  padding-left: 0;
+}
+.map-card md-card-title .md-headline {
+  height: 32px;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.map-card md-card-title .md-subhead {
+  width: 150px;
+  max-height: 44px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel-card {
+  position: relative;
+}
+.panel-card .card-media {
+  background-color: #eee;  
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.panel-card .card-media.has-picture {
+  background-color: #fff;
+}
+event-detailed {
+  position: relative;
+}

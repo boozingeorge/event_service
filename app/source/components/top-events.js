@@ -1,4 +1,4 @@
-function TopEventsController(APIClient, PopUp) {
+function TopEventsController(APIClient, PopUp, Emitter) {
   var ctrl = this;
 
   ctrl.toggleSubscribe = function (event) {
@@ -16,6 +16,7 @@ function TopEventsController(APIClient, PopUp) {
       APIClient.leaveEvent(event.id).then(function () {
         ctrl.user.events.splice(index, 1);
         event.membersAmount--;
+        event.joined = false;
       }).catch(function (err) {
         PopUp.Error();
       });
@@ -23,10 +24,15 @@ function TopEventsController(APIClient, PopUp) {
       APIClient.joinToEvent(event.id).then(function () {
         ctrl.user.events.push(event.id);
         event.membersAmount++;
+        event.joined = true;
       }).catch(function (err) {
         PopUp.Error();
       });
     }
+  };
+  
+  ctrl.openEvent = function (event) {
+    Emitter.emit('eventOpened', event);
   };
 }
 

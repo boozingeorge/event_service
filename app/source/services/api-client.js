@@ -169,5 +169,27 @@ function APIClientService($http, $q, Config, Emitter) {
     return deferred.promise;
   };
 
+  APIClient.prototype.deleteEvent = function (id) {
+    var self = this;
+    var deferred = $q.defer();
+    self.getToken().then(function (response) {
+      return $http({
+        method: 'POST',
+        url: self._basicURL + '/api/event.delete',
+        data: 'id=' + id + '&access_token=' + self._token.value,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+    }, function (response) {
+      deferred.reject(response);
+    }).then(function (response) {
+      deferred.resolve((response.data.error) ? false : true);
+    }, function (response) {
+      deferred.reject(response);
+    });
+    return deferred.promise;
+  };
+  
   return new APIClient();
 }

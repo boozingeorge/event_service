@@ -1,0 +1,25 @@
+<md-card>
+    <img ng-show="!!event.picture" ng-src="{{event.picture}}" class="md-card-image" alt="{{event.title}}">
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">{{event.title}}</span>
+        </md-card-title-text>
+    </md-card-title>
+    <md-card-actions layout="row" layout-align="start center">
+        <md-card-icon-actions>
+            <!-- TODO: Add event.poseterId, user.id to response -->
+            <div ng-show="(event.poseterId === user.id)">
+                <md-button ng-click="editEvent(event)" class="md-icon-button" aria-label="Edit event">
+                    <md-icon md-svg-src="svg/ic_edit_48px.svg"></md-icon>
+                </md-button>
+                <md-button ng-click="deleteEvent($event, event)" class="md-icon-button" aria-label="Delete event">
+                    <md-icon md-svg-src="svg/ic_delete_48px.svg"></md-icon>
+                </md-button>
+            </div>    
+            <md-button ng-click="toggleSubscribe(event)" aria-label="Toggle subscribe">{{ event.membersAmount}}<md-icon md-svg-src="svg/ic_people_48px.svg"></md-icon></md-button>
+        </md-card-icon-actions>
+    </md-card-actions>
+    <md-card-content>
+        <p>{{event.description}}</p>
+    </md-card-content>
+</md-card>

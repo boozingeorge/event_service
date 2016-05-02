@@ -1,15 +1,15 @@
-<md-card style="position: relative" flex="100" ng-repeat="event in $ctrl.events">
+<md-card flex="100" ng-repeat="event in $ctrl.events" class="panel-card">
     <md-card-title>
         <md-card-title-text>
             <span class="md-headline">{{event.title}}</span>
             <span class="md-subhead">{{event.description}}</span>
         </md-card-title-text>
         <md-card-title-media>
-            <div class="md-media-sm card-media"></div>
+            <div class="md-media-sm card-media {{(event.picture) ? 'has-picture' : '';}}" style="background-image: url('{{event.picture}}');"></div>
         </md-card-title-media>
     </md-card-title>
     <md-card-actions layout="row" layout-align="end center">
-        <md-button>Подробнее</md-button>
+        <md-button ng-click="$ctrl.openEvent(event)">Подробнее</md-button>
         <md-button ng-click="$ctrl.toggleSubscribe(event)">{{ event.membersAmount}}<md-icon md-svg-src="svg/ic_people_48px.svg"></md-icon></md-button>
     </md-card-actions>
 </md-card>

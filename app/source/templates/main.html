@@ -1,9 +1,10 @@
-<map></map>
+<map user="$ctrl.user" events="$ctrl.events"></map>
 <div class="tools" layot="row">
     <div class="search-wrapper">
         <search events="$ctrl.events"></search>
-    </div>  
-    <burger-menu layout="row" events="$ctrl.events" cards="$ctrl.cards"></burger-menu>
+    </div>
+    <burger-menu layout="row" events="$ctrl.events" cards="$ctrl.cards" event-opened="$ctrl.eventOpened"></burger-menu>
+    <event-detailed event="$ctrl.eventOpened" user="$ctrl.user" events="$ctrl.events" ng-show="$ctrl.cards.eventDetailed"></event-detailed>
     <profile user="$ctrl.user" ng-show="$ctrl.cards.profile"></profile>
     <top-events user="$ctrl.user" events="$ctrl.events" ng-show="$ctrl.cards.topEvents"></top-events>
     <event-form events="$ctrl.events" ng-show="$ctrl.cards.eventForm"></event-form>

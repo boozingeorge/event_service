@@ -18,6 +18,10 @@ function MapController($scope, Emitter, GoogleMap) {
   Emitter.listen('eventUnselected', function () {
     GoogleMap.displayAll();
   });
+  
+  Emitter.listen('eventSaved', function (event) {
+    GoogleMap.refreshMarker(event, $scope);
+  });
 }
 
 EventService.component('map', {

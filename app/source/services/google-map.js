@@ -65,6 +65,15 @@ function GoogleMapService($compile, Config) {
     this._displayMarker(event, scope);
     this.map.setCenter({lat: event.lat, lng: event.long});
   };
+  
+  GoogleMap.prototype.refreshMarker = function (event, scope) {
+    var self = this;
+    var marker = self.markers[event.id];
+    if (marker) {
+      var latlng = new google.maps.LatLng(event.lat, event.long);
+      marker.setPosition(latlng);
+    }
+  };
 
   GoogleMap.prototype.displayMarkers = function (events, scope) {
     var self = this;

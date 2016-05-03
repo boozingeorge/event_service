@@ -27,19 +27,16 @@ function MainController ($timeout, APIClient, PopUp, Emitter) {
     });
 
     ctrl.user = {};
-    APIClient.getProfile().then(function (response) {
-      ctrl.user = {
-        firstName: response.firstName,
-        lastName: response.lastName,
-        avatar: response.avatar,
-        events: response.events
-      };
+    APIClient.getProfile().then(function (user) {
+      ctrl.user = user;
     }).catch(function (err) {
-      PopUp.ConnectError();
+      PopUp.Error();
     });
   });
   
-  APIClient.getToken();
+  APIClient.getToken().catch(function (err) {
+    PopUp.Error();
+  });
 };
 
 EventService.component('main', {

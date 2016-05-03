@@ -60,14 +60,15 @@ function APIClientService($http, $q, Config, Emitter) {
       var events = response.data.response.map(function (event) {
         return {
           id: event.id,
+          title: event.title,
+          description: event.description,
+          posterId: event.poster_id,
           beginAt: event.begin_at,
           endAt: event.end_at,
           membersAmount: event.members_amount,
-          title: event.title,
-          description: event.description,
+          picture: event.picture,
           lat: event.lat,
-          long: event.long,
-          picture: event.picture
+          long: event.long
         };
       });
       deferred.resolve(events);
@@ -88,6 +89,10 @@ function APIClientService($http, $q, Config, Emitter) {
     }, function (response) {
       deferred.reject(response);
     }).then(function (response) {
+      if (response.data.error) {
+        deferred.reject(response);
+        return;
+      }
       deferred.resolve({
         id: response.data.response.id,
         firstName: response.data.response.first_name,
@@ -145,7 +150,7 @@ function APIClientService($http, $q, Config, Emitter) {
     return deferred.promise;
   };
 
-  APIClient.prototype.createEvent = function(event){
+  APIClient.prototype.createEvent = function(event) {
     var self = this;
     var deferred = $q.defer();
     var data = 'begin_at=' + event.beginAt + '&end_at=' + event.endAt + '&title=' + event.title + '&description=' + event.description +
@@ -153,17 +158,23 @@ function APIClientService($http, $q, Config, Emitter) {
     if (event.picture) {
       data += '&picture=' + event.picture;
     }
-    $http({
-      method: 'POST',
-      url: self._basicURL + '/api/event.create',
-      data: data,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+    self.getToken().then(function (response) {
+      return $http({
+        method: 'POST',
+        url: self._basicURL + '/api/event.create',
+        data: data,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
     }).then(function(response){
+      if (response.data.error) {
+        deferred.reject(response);
+        return;
+      }
       deferred.resolve(response);
-    }, function(response){
-      deferred.reject(response);
+    }).catch(function(err){
+      deferred.reject(err);
     });
 
     return deferred.promise;
@@ -181,13 +192,41 @@ function APIClientService($http, $q, Config, Emitter) {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-    }, function (response) {
-      deferred.reject(response);
     }).then(function (response) {
       deferred.resolve((response.data.error) ? false : true);
     }, function (response) {
       deferred.reject(response);
     });
+    return deferred.promise;
+  };
+  
+  APIClient.prototype.editEvent = function(event) {
+    var self = this;
+    var deferred = $q.defer();
+    var data = 'id=' + event.id + '&begin_at=' + event.beginAt + '&end_at=' + event.endAt + '&title=' + event.title + '&description=' + event.description +
+      '&lat=' + event.lat + '&long=' + event.long + '&access_token=' + self._token.value;
+    if (event.picture) {
+      data += '&picture=' + event.picture;
+    }
+    self.getToken().then(function (response) {
+      return $http({
+        method: 'POST',
+        url: self._basicURL + '/api/event.edit',
+        data: data,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+    }).then(function(response){
+      if (response.data.error) {
+        deferred.reject(response);
+        return;
+      }
+      deferred.resolve(response);
+    }).catch(function(err){
+      deferred.reject(err);
+    });
+
     return deferred.promise;
   };
   

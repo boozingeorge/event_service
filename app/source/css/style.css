@@ -53,7 +53,7 @@ burger-menu {
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
   pointer-events: none;
-  z-index: 100;
+  z-index: 49;
   width: inherit;
 }
 burger-menu md-fab-toolbar {

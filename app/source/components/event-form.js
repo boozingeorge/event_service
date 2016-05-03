@@ -1,8 +1,27 @@
 function EventFormController(GoogleMap, $timeout, $scope, Config, PopUp, APIClient, EventDatetime, Emitter) {
-  var ctrl = this;
-
+  var ctrl = this,
+     originalEvent;
+   
   ctrl.event = {};
-  initEventForm();
+  
+  Emitter.listen('eventAdd', function() {
+    ctrl.event = {};
+    rebuildEventForm();
+  });
+  Emitter.listen('eventEdit', function(event) {
+    ctrl.event = angular.copy(event);
+    originalEvent = event;
+    ctrl.viewLocation = event.lat.toFixed(4) + ', ' + event.long.toFixed(4);
+    
+    var maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + Config.maxDateInterval);
+    var nowDate = new Date();
+
+    ctrl.beginAt = new EventDatetime(new Date(event.beginAt), nowDate, maxDate);
+    ctrl.endAt = new EventDatetime(new Date(event.endAt), nowDate, maxDate);
+  });
+  
+  rebuildEventForm();
 
   ctrl.setLocation = function () {
     ctrl.locationDisabled = true;
@@ -17,37 +36,57 @@ function EventFormController(GoogleMap, $timeout, $scope, Config, PopUp, APIClie
     });
   };
 
-  ctrl.createEvent = function () {
+  ctrl.handleEvent = function () {
     ctrl.event.beginAt = ctrl.beginAt.getDatetime();
     ctrl.event.endAt = ctrl.endAt.getDatetime();
     if (!ctrl.event.picture) {
       delete ctrl.event['picture'];
     }
-
-    APIClient.createEvent(ctrl.event).then(function (response) {
-      if (response.data.error) {
-        throw new Error(response.data.error.error_message);
-      }
-      var event = {
-        id: response.data.response.id,
-        beginAt: ctrl.event.beginAt,
-        endAt: ctrl.event.endAt,
-        title: ctrl.event.title,
-        description: ctrl.event.description,
-        picture: ctrl.event.picture,
-        lat: ctrl.event.lat,
-        long: ctrl.event.long,
-        membersAmount: 0
-      };
-      Emitter.emit('eventAdded', event);
-      ctrl.events.push(event);
-      initEventForm();
-    }).catch(function (err) {
-      PopUp.Error();
-    });
+    if (!ctrl.event.id) {
+      APIClient.createEvent(ctrl.event).then(function (response) {
+        if (response.data.error) {
+          throw new Error(response.data.error.error_message);
+        }
+        var event = {
+          id: response.data.response.id,
+          title: ctrl.event.title,
+          description: ctrl.event.description,
+          posterId: ctrl.user.id,
+          beginAt: ctrl.event.beginAt,
+          endAt: ctrl.event.endAt,
+          picture: ctrl.event.picture,
+          lat: ctrl.event.lat,
+          long: ctrl.event.long,
+          membersAmount: 0
+        };
+        Emitter.emit('eventAdded', event);
+        ctrl.events.push(event);
+        rebuildEventForm();
+      }).catch(function (err) {
+        PopUp.Error();
+      });
+    } else {
+      APIClient.editEvent(ctrl.event).then(function (response) {
+        if (response.data.error) {
+          throw new Error(response.data.error.error_message);
+        }
+        originalEvent.title = ctrl.event.title;
+        originalEvent.description = ctrl.event.description;
+        originalEvent.beginAt = ctrl.event.beginAt;
+        originalEvent.endAt = ctrl.event.endAt;
+        originalEvent.picture = ctrl.event.picture;
+        originalEvent.lat = ctrl.event.lat;
+        originalEvent.long = ctrl.event.long;
+        Emitter.emit('eventSaved', originalEvent);
+      }).catch(function (err) {
+        PopUp.Error();
+      });
+    }
   };
 
-  function initEventForm() {
+  
+
+  function rebuildEventForm() {
     var endDate = new Date();
     endDate.setDate(endDate.getDate() + Config.endDateInterval);
     var maxDate = new Date();
@@ -76,7 +115,8 @@ function EventFormController(GoogleMap, $timeout, $scope, Config, PopUp, APIClie
 EventService.component('eventForm', {
   templateUrl: 'templates/event-form.html',
   bindings: {
-    events: '='
+    events: '=',
+    user: '<'
   },
   controller: EventFormController
 });
